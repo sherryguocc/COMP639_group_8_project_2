@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+
+    <div class="breadcrumb">
+        {% block breadcrumb %}
+        {{ super() }}  
+        <li class="breadcrumb-item"><a href="{{url_for('planner.home')}}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{url_for('planner.venue_list')}}">Manage Venue</a></li>
+        <li class="breadcrumb-item"><a href="{{url_for('planner.decoration_list')}}">Manage Decoration</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Add Decoration</li>
+        {% endblock %}
+    </div>
+
+    <h2>Add a New decoration</h2>
+
+    <form method="POST" action="{{ url_for('planner.add_decoration') }}" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-md-6">
+                <label for="name">Decoration Tpye:</label>
+                <input type="text" name="decoration_type" pattern="^[a-zA-Z0-9]+$" title="Type must be a combination of letters and numbers" required>
+            </div>
+            <div class="col-md-6">
+                <label for="price">Price:</label>
+                <input type="number" name="price" step="0.01" required>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <label for="description">Description:</label><br>
+                <textarea name="description" class="venue-textarea"></textarea>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <label for="image">Upload Image(jpg,jepg,png,gif only):</label>
+                <input type="file" name="decoration_image" class="venue-textarea" accept="image/*">
+            </div>
+        </div>
+
+        <div>
+            <input type="submit" value="Submit">
+        </div>
+    </form>
+</div>
+{% endblock %}

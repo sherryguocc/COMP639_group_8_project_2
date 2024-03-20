@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+
+    <div class="breadcrumb">
+        {% block breadcrumb %}
+        {{ super() }}  
+        <li class="breadcrumb-item"><a href="{{url_for('admin.home')}}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{url_for('admin.venue_list')}}">Venue List</a></li>
+        <li class="breadcrumb-item"><a href="{{url_for('admin.decoration_list')}}">Manage Decoration</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Edit Decoration</li>
+        {% endblock %}
+    </div>
+
+    <h2>Edit Decoration Package</h2>
+    
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flash-messages">
+            {% for message in messages %}
+                <li class="flash-message">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    
+    <div style="display: flex;">
+
+        <div style="flex: 1; margin-right: 20px;">
+            <form method="POST" action="{{ url_for('admin.edit_decoration', decoration_id=decoration.ID) }}">
+
+                <label for="decoration_type">decoration Type:</label>
+                <input type="text" name="decoration_type" value="{{ decoration.decor_type }}" required>
+        
+                <label for="price">Price:</label>
+                <input type="number" name="price" step="0.01" value="{{ decoration.price }}">
+
+                <label for="description">Description:</label>
+                <textarea name="description" rows="4" cols="50" value = "{{ decoration.description}}">{{ decoration.description }}</textarea>
+          
+                <input type="submit" value="Save Changes" class = "button">
+        
+            </form>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

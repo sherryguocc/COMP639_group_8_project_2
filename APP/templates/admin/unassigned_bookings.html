@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+
+    <div class="breadcrumb">
+        {% block breadcrumb %}
+        {{ super() }}  
+        <li class="breadcrumb-item"><a href="{{url_for('admin.home')}}">Dashboard</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Unassigned Booking List</li>
+        {% endblock %}
+    </div>
+
+    <div class="custom-alert">
+        {% if msg %}
+        <div class="checkmark">✓</div>
+        <div class="alert-message">
+                {{ msg }}
+            {% endif %}
+        </div>
+    </div>
+    <!-- Table for Displaying Available Bookings -->
+
+    <div id="update-form" class="edit" style="margin-left: 10%; margin-right: 10%; margin-bottom: 8%;">
+
+        <h2>Unassigned New Bookings</h2>
+        <br>
+
+            <table id="bookingTable" data-toggle="table" data-show-export="true" class="table table-bordered">
+                <thead>
+                    <!-- Table Header Row -->
+                    <tr>
+                        <th>Customer</th>
+                        <th>Venue</th>
+                        <th>Location</th>
+                        <th data-sortable="true">Start Date</th>
+                        <th data-sortable="true">Start Time</th>
+                        <th data-sortable="true">End Date</th>
+                        <th data-sortable="true">End Time</th>
+                        <th data-sortable="true">Guest Number</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% if unassigned_bookings %}
+                    {% for booking in unassigned_bookings %}
+                        <tr>
+                            <td>{{ booking[0] }}</td>
+                            <td>{{ booking[2] }}</td> 
+                            <td>{{ booking[3] }}</td>  
+                            <td>{{ booking[8].strftime('%d-%m-%Y') }}</td>
+                            <td>{{ '{:02d}:{:02d}'.format(booking[9].seconds // 3600, (booking[9].seconds // 60) % 60) }}</td>
+                            <td>{{ booking[10].strftime('%d-%m-%Y') }}</td>
+                            <td>{{ '{:02d}:{:02d}'.format(booking[11].seconds // 3600, (booking[11].seconds // 60) % 60) }}</td>
+                            <td>{{ booking[12] }}</td>
+                            <td>
+                                <a href="{{ url_for('admin.assign_booking', booking_id = booking[13]) }}" style="color: #740b5d; text-decoration: none; font-weight: bold;">Assign</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <!-- No Available Bookings -->
+                    <tr>
+                        <td colspan="11">Great! All the current bookings have been assigned to planners.</td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+</div>
+
+
+{% endblock %}

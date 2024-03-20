@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<div class = "container">
+    <div class = "breadcrumb">
+        {% block breadcrumb %}
+        {{ super() }}  
+        <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+        {% endblock %}
+    </div>
+
+    
+    <div class = "main-dashboard">
+        <div class = "left-panel">
+            <div class = "user-info">
+                <h2>Planner</h2>
+                <div class="d-flex">
+                    <img src="{{aPlan[10]}}" alt="Image of Planner" class="profile-pic img-fluid">
+                </div>
+                <br>
+                <p><strong>User Number: </strong> {{aPlan[1]}} </p>
+                <p><strong>Title: </strong> {{aPlan[2]}} </p>
+                <p><strong>Name: </strong> {{aPlan[3]}} {{aPlan[4]}}</p>
+                <p><strong>Email: </strong>{{ aPlan[7] }}</p>
+                <p><strong>Phone Number: </strong>{{ aPlan[6] or 'N/A' }}</p>    
+                <p><strong>Address: </strong>{{ aPlan[8] or 'N/A' }}</p> 
+                <p><strong>Profile Description: </strong>{{ aPlan[9] or 'N/A' }}</p>                                           
+            </div>
+
+            <div class = "alerts">
+                <h2>Alerts</h2>
+                {% if unread_messages_count > 0 %}
+                <p style="color: brown;">You have new messages. Please see Message!</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="center-panel">
+            <div class="quick-actions">
+                <ul>
+                    <li><a href="{{ url_for('planner.view_available_bookings') }}"><span class="material-symbols-outlined"> add_task</span>Available Bookings</a></li>
+                    <li><a href="{{ url_for('planner.accepted_bookings', plannerID=current_user.id) }}"><span class="material-symbols-outlined">view_list</span>Quote</a></li>
+                    <li><a href="{{ url_for('planner.view_bookings', plannerID=current_user.id) }}"><span class="material-symbols-outlined">menu_book</span>Edit Bookings</a></li>
+                    <li><a href="{{url_for('planner.venue_list')}}"><span class="material-symbols-outlined">location_city</span>Manage Venue</a></li>
+                    <li><a href="{{ url_for('planner.generate_report') }}"><span class="material-symbols-outlined">bookmark</span>Generate Reports</a></li>
+                        
+                    <li>
+                        <a href="{{ url_for('planner.view_messages', plannerID=current_user.id) }}">
+                            <div class="button-header pull-left">
+                                <span class="fas fa-envelope msg-icon icon-headernav"></span>
+                                {% if unread_messages_count > 0 %}
+                                    <div class='notification-dot'></div>Message
+                                {% else %}
+                                    Message
+                                {% endif %}
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

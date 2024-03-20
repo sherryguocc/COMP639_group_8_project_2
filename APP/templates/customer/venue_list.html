@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="breadcrumb">
+        {% block breadcrumb %}
+        {{ super() }}  
+        <li class="breadcrumb-item"><a href="{{url_for('customer.home')}}">Dashboard</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Venue List</li>
+        {% endblock %}
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul class="flash-messages">
+        {% for message in messages %}
+            <li class="flash-message">{{ message }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+    {% endwith %}
+
+    <div class="content-wrapper">
+        <div class="filters-section">
+            <!-- Filters Section -->
+            <div class="filter">
+                <h3>Filters</h3>
+                <form method="GET" action="{{ url_for('customer.venue_list') }}">
+                    <button class="button" type="submit">Click to Sort by type</button>
+                    <select class="filter" name="type">
+                        <option value="all">All</option>
+                        <option value="wedding">Wedding</option>
+                        <option value="meeting">Meeting</option>
+                        <option value="conference">Conference</option>
+                        <option value="gallery">Gallery</option>
+                        <option value="team building">Team Building</option>
+                        <option value="lab">Lab</option>
+                        <option value="party">Party</option>
+                        <option value="exhibition">Exhibition</option>
+                        <option value="outdoor">Outdoor</option>
+                        <option value="indoor">Indoor</option>
+                    </select>
+                </form>
+                <a class="button" href="{{ url_for('customer.venue_list', sort_column='venueName', sort_direction='asc') }}">Sort by Venue Name ⬆</a><a class="button" href="{{ url_for('customer.venue_list', sort_column='venueName', sort_direction='desc') }}">⬇</a><br><br>
+                <a class="button" href="{{ url_for('customer.venue_list', sort_column='location', sort_direction='asc') }}">Sort by Location ⬆</a><a class="button" href="{{ url_for('customer.venue_list', sort_column='location', sort_direction='desc') }}">⬇</a><br><br>
+                <a class="button" href="{{ url_for('customer.venue_list', sort_column='event_area', sort_direction='asc') }}">Sort by Event Area ⬆</a><a class="button" href="{{ url_for('customer.venue_list', sort_column='event_area', sort_direction='desc') }}">⬇</a><br><br>
+                <a class="button" href="{{ url_for('customer.venue_list', sort_column='capacity', sort_direction='asc') }}">Sort by Capacity ⬆</a><a class="button" href="{{ url_for('customer.venue_list', sort_column='capacity', sort_direction='desc') }}">⬇</a><br><br>
+                <a class="button" href="{{ url_for('customer.venue_list', sort_column='daily_price', sort_direction='asc') }}">Sort by Daily Price ⬆</a><a class="button" href="{{ url_for('customer.venue_list', sort_column='daily_price', sort_direction='desc') }}">⬇</a><br><br>
+                <a class="button" href="{{ url_for('customer.venue_list', sort_column='hourly_price', sort_direction='asc') }}">Sort by Hourly Price ⬆</a><a class="button" href="{{ url_for('customer.venue_list', sort_column='hourly_price', sort_direction='desc') }}">⬇</a><br><br>
+                <br><br>
+            </div>
+        </div>
+        <div class="cards-section">            
+            <!-- Cards Section for Venue Listings -->
+            {% for venue in venueList %}
+                <div class="card">
+                    <!-- Display Venue Image if Available -->
+                    {% if venue.image_content and venue.image_content[0] %}
+                        <div class="swiper-slide">
+                            <img src="{{ venue.image_content[0] }}" alt="Venue Image">
+                        </div>
+                    {% endif %} 
+                    <div class="card-body">
+                        <!-- Display Venue Name -->
+                        <h5 class="card-title title-text">{{ venue.get_venueName }}</h5>
+                        
+                        <!-- Display Event Area, Capacity, and Location -->
+                        <p class="card-text"><strong>Event Area:</strong> {{ venue.get_eventArea }}</p>
+                        <p class="card-text"><strong>Capacity:</strong> {{ venue.get_maxCapacity }}</p>
+                        <p class="card-text"><strong>Location:</strong> {{ venue.get_location }}</p>
+                        
+                        <!-- Venue Buttons -->
+                        <a class="button" href="{{ url_for('customer.view_venues', venueID=venue.get_venueID ) }}" class="Button">Find out more</a>
+                    </div>
+                </div>
+            {% endfor %} 
+        </div>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="pagination">
+        {% if page > 1 %}
+            <a href="{{ url_for('customer.venue_list', page=page-1) }}"><span class="material-symbols-outlined">arrow_back_ios</span></a>
+        {% endif %}
+            <span>Page {{ page }}</span>
+        {% if venueList|length >= per_page %}
+            <a href="{{ url_for('customer.venue_list', page=page+1) }}"><span class="material-symbols-outlined">arrow_forward_ios</span></a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

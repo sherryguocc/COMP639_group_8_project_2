@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class ="container">
+
+    <div class = "breadcrumb">
+        {% block breadcrumb %}
+        {{ super() }}  
+        <li class="breadcrumb-item"><a href="{{url_for('planner.home')}}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{url_for('planner.accepted_bookings', plannerID = current_user.id)}}">Accepted Bookings</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Quote Form</li>
+        {% endblock %}
+    </div>
+ 
+    <h2>Generate a Quote</h2>
+
+    <form action="{{ url_for('planner.quote_form', bookingID=bookingID) }}" method="post">
+
+        <label for="venue_fee">Venue Fee:</label>
+        <input type="text" name="venue_fee" value="{{aBooking[18]}}"required>
+        <br>
+    
+        <label for="decoration_fee">Decoration Fee:</label>
+        <input type="text" name="decoration_fee" value="{{aBooking[14]}}"required>
+        <br>
+    
+        <label for="menu_price">Menu Price:</label>
+        <input type="text" name="menu_price" value="{{aBooking[15]}}" required>
+        <br>
+    
+        <label for="additional_requirements">Additional Requirements:</label>
+        <textarea name="additional_requirements"></textarea>
+        <br>
+
+        <label for="additional_requirements_fee">Additional Requirements Fee</label>
+        <input type="number" name="additional_requirements_fee" value="0" min="0">
+        <br>
+
+        <label for="discounts">Discounts: %</label>
+        <input type="number" name="discounts" value="0" min="0" max="100">
+        <br>
+    
+        <label for="notes">Notes:</label>
+        <textarea name="notes"></textarea>
+        <br>
+    
+        <label for="expiry_date">Expiry Date:</label>
+        <input type="date" name="expiry_date" required>
+        <br>
+
+    
+        <input type="submit" value="Create Quote">
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+
+    <div class="breadcrumb">
+        {% block breadcrumb %}
+        {{ super() }}  
+        <li class="breadcrumb-item"><a href="{{url_for('admin.home')}}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{url_for('admin.venue_list')}}">Venue List</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Add Venue</li>
+        {% endblock %}
+    </div>
+    <br>
+    
+    <h2>Add a New Venue</h2>
+
+    <!-- Display Flash Messages if Available -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class="flash-messages">
+        {% for message in messages %}
+        <li class="flash-message">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('admin.add_venue') }}">
+        <div class="row">
+            <div class="col-md-6">
+                <label for="venue_name">Venue Name:</label>
+                <input type="text" pattern="^[a-zA-Z0-9]+$" title="Name must be a combination of letters and numbers" name="venue_name" required>
+            </div>
+            <div class="col-md-6">
+                <label for="event_area">Event Area:</label>
+                <input type="number" name="event_area" step="0.01" required>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <label for="max_capacity">Max Capacity:</label>
+                <input type="number" name="max_capacity" required>
+            </div>
+            <div class="col-md-6">
+                <label for="location">Location:</label>
+                <input type="text" pattern="^[a-zA-Z0-9]+$" title="Location must be a combination of letters and numbers" name="location" required>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <label for="hourly_price">Hourly Price:</label>
+                <input type="number" name="hourly_price" step="0.01" required>
+            </div>
+            <div class="col-md-6">
+                <label for="status">Status:</label>
+                <select name="status" required>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+            </div>  
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <label for="daily_price">Daily Price:</label>
+                <input type="number" name="daily_price" step="0.01" required>
+            </div>          
+            <div class="col-md-6">
+                <label for="description">Description:</label><br>
+                <textarea name="description" style="width:50%" class="venue-textarea"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label for="type">Type:</label>
+                <table>
+                    <tr>
+                        <td><input type="checkbox" id="type_wedding" name="type" value="wedding"></td>
+                        <td><label for="type_wedding"> Wedding</label></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" id="type_meeting" name="type" value="meeting"></td>
+                        <td><label for="type_meeting"> Meeting</label></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" id="type_team_building" name="type" value="team building"></td>
+                        <td><label for="type_team_building"> Team Building</label></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" id="type_conference" name="type" value="conference"></td>
+                        <td><label for="type_conference"> Conference</label></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" id="type_lab" name="type" value="lab"></td>
+                        <td><label for="type_lab"> Lab</label></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" id="type_stadium" name="type" value="stadium"></td>
+                        <td><label for="type_stadium"> Stadium</label></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" id="type_exhibition" name="type" value="exhibition"></td>
+                        <td><label for="type_exhibition"> Exhibition</label></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" id="type_party" name="type" value="party"></td>
+                        <td><label for="type_party"> Party</label></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" id="type_gallery" name="type" value="gallery"></td>
+                        <td><label for="type_gallery"> Gallery</label></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" id="type_indoor" name="type" value="indoor"></td>
+                        <td><label for="type_indoor"> Indoor</label></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" id="type_outdoor" name="type" value="outdoor"></td>
+                        <td><label for="type_outdoor"> Outdoor</label></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <label for="image_urls">Image URLs (one per line):</label><br>
+                <textarea name="image_urls" style="width:50%" class="venue-textarea"></textarea>
+            </div>
+        </div>
+        
+        <div>
+            <input type="submit" value="Submit">
+        </div>
+    </form>
+</div>
+{% endblock %}

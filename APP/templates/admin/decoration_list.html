@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <div class="container">
+
+        <!-- Display Flash Messages if Available -->
+        <div class="breadcrumb">
+            {% block breadcrumb %}
+            {{ super() }}  
+            <li class="breadcrumb-item"><a href="{{url_for('admin.home')}}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{{url_for('admin.venue_list')}}">Venue List</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Manage Decoration</li>
+            {% endblock %}
+        </div>
+
+        <h2>Manage Decoration Packages</h2><br>
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul class="flash-messages">
+            {% for message in messages %}
+            <li class="flash-message">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+
+        <!-- Add a New decoration Button -->
+        
+        <a class="button"href="{{ url_for('admin.add_decoration') }}">Add a New decoration</a><br><br><br>
+
+        <!-- decoration Table -->
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Decoration Type<br>
+                        <a href="{{ url_for('admin.decoration_list', sort='decorationType-asc') }}">▲</a>
+                        <a href="{{ url_for('admin.decoration_list', sort='decorationType-desc') }}">▼</a>
+                    </th>
+                    <th>
+                        Price<br>
+                        <a href="{{ url_for('admin.decoration_list', sort='price-asc') }}">▲</a>
+                        <a href="{{ url_for('admin.decoration_list', sort='price-desc') }}">▼</a>
+                    </th>
+                    <th>
+                        Description<br>
+                        <a href="{{ url_for('admin.decoration_list', sort='description-asc') }}">▲</a>
+                        <a href="{{ url_for('admin.decoration_list', sort='description-desc') }}">▼</a>
+                    </th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for decoration in decorationList %}
+                <tr>
+                    <td>{{ decoration.decor_type }}</td>
+                    <td>${{ decoration.price }}</td>
+                    <td>{{ decoration.description }}</td>
+                    <td>
+                        <a href="{{ url_for('admin.edit_decoration', decoration_id=decoration.ID) }}" class="btn btn-light">Edit</a>
+                        <a href="{{url_for('admin.delete_decoration', decoration_id=decoration.ID)}}"class="btn btn-light">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

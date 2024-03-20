@@ -1,0 +1,923 @@
+@font-face {
+    font-family: 'MoonDance';
+    src: url('MoonDance-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'PlayfairDisplay-Black';
+    src: url('PlayfairDisplay-Black.ttf');
+}
+
+html, body {
+    height: 100%; /* 使得body高度至少为视口高度 */
+    margin: 0; /* 去除默认的margin */
+}
+
+
+.sticky-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 140px;
+    z-index: 1000; 
+    background-color: #e3dae1;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); 
+    
+}
+
+/* Styling for the navigation bar*/
+.title-and-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: transparent; 
+}
+
+/* Styling for the title container which houses the site or application's title. */
+.title_container {
+    padding-top: 10px;
+    padding-right: 30px;
+    padding-bottom: 30px;
+    padding-left: 40px;
+    text-align: center;
+    border-bottom: 1px solid #e5e5e5;
+    z-index: 10;
+}
+
+/* Styling for the title link. */
+.title a {
+    color: #382a33; 
+    text-decoration: none !important;
+    font-size: 24px;
+    font-family: 'PlayfairDisplay-Black';
+    margin-left: 30px;
+}
+
+/* General image properties. */
+img {
+    width: 140px; 
+    height: auto; 
+    margin: -10px 0; 
+}
+
+/* Material Icons Styling */
+.material-icons {
+    color: #382a33;
+    font-size: 36px;
+    justify-content: center !important;
+}
+
+/*styling for icons*/
+.material-icons-outlined {
+    color: #382a33;
+
+}
+
+/*styling for icons*/
+.material-icons-outlined:hover {
+    background-color: #d1c9cf;
+}
+
+
+/*styling for nav links */
+.nav-link {
+    font-family: 'PlayfairDisplay-Black';
+    display: flex;
+    justify-content: center !important; /* horizontally align the icon and text */
+}
+
+.nav-item {
+    margin-right: 20px;
+}
+
+.nav-link .material-icons {
+    margin-right: 5px;
+}
+
+
+/* Style for the tab container */
+.tab-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* Style for each tab */
+.tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    border: 1px solid #382a33;
+}
+
+
+/* Style for active tab */
+
+.tab.active {
+    background-color: #382a33;
+    color: white;
+    
+}
+
+
+/* Style for each menu content */
+.menu-content {
+    display: none;
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Style for active menu content */
+.active-content {
+    display: block !important;
+}
+
+.menu-content img {
+    width: 70% !important; 
+    height: auto; /* Maintain the aspect ratio of the image */
+    border: 2px solid #382a33;
+    border-radius: 10px;
+}
+
+/* General container properties. */
+.container {
+    overflow: hidden;
+    padding: 1rem;
+    flex: 2;
+    margin-top:7%;
+}
+
+/* Style for headers */
+.container h1, h2, h3, h5, p, b{
+    color: #382a33; 
+    font-family:'PlayfairDisplay-Black' ;
+}
+
+
+.container form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px; /* space between each form element */
+    margin: auto;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    margin-right: 20px !important;
+    margin-bottom: 20px;
+}
+
+/* adjust the fas icons within the label tag*/
+.container label {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 30px;
+    margin-top: 1em; 
+}
+
+
+.form-group {
+    width: 100%;
+    position: relative;
+}
+
+
+input, select, textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px; /* rounded corners */
+    font-size: 1em;
+    width: 80%;
+    height: 10%;
+
+}
+
+.container form input[type="text"], 
+.container form input[type="email"],
+.container form input[type="tel"], 
+.container form input[type ="date"],
+.container form input[type ="password"],
+.container form input[type ="time"],
+.container form input[type = "phone"],
+.container form input[type = "number"],
+.container form select {
+    width: 310px;
+    height: 50px;
+    border: 1px solid #dee0e4;
+    margin-bottom: 20px;
+    padding: 0 15px;
+    font-family: 'PlayfairDisplay-Black';
+    background-color: #ffffff;
+}
+
+.container form input[type = "checkbox"] {
+    text-align: "left";
+    width: 10px;
+    position: auto
+}
+
+/*increase size of radio button*/
+input[type="radio"] {
+    transform: scale(2.0); 
+}
+
+.container form input[type="submit"]{
+    width: 28%;
+    padding: 15px;
+    margin-top: 20px;
+    background-color: #382a33;
+    border: 0;
+    cursor: pointer;
+    color: white;
+    font-family: 'PlayfairDisplay-Black';
+    transition: background-color 0.2s;
+}
+
+.button {
+    background-color: #382a33; /* Button color */
+    color: white; /* Text color on button */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px; /* Rounded corner on button */
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 600;
+    text-decoration: none !important;
+}
+
+button:hover {
+    background-color: #2a1d24; /* Darken button color on hover */
+}
+
+.mybutton {
+    border-radius: 5px;
+    border: none;
+    padding: 10px 20px;
+    background-color: #e3dae1; /* Button color */
+    color: #2a1d24; /* Text color on button */
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 600;
+    text-decoration: none !important;
+}
+
+.mybutton:hover {
+    background-color: #2a1d24; /* Darken button color on hover */
+    color: #e3dae1;
+}
+
+.mybutton:active {
+    background-color: #2a1d24;
+}
+
+.button-container {
+    display: flex;
+    gap: 20px; 
+}
+
+.search-container .search-form {
+    display: flex;
+    align-items: center;
+}
+
+
+.search-container .search-form input[type="search"] {
+    padding: 5px 20px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 14px;
+    margin-left: -80px;
+}
+
+
+.search-container .search-form button[type="submit"] {
+    background-color: #e3dae1;
+    color: #2a1d24;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 200px;
+    margin-top: -42px; 
+}
+
+/*unread messages*/
+.unread {
+    font-weight: bold;
+    color: #000; /* or any dark color you prefer */
+}
+
+
+.a{
+    font-family: 'PlayfairDisplay-Black';
+    text-decoration: none !important;
+}
+
+
+
+/* Styling for a search container */
+.search {
+    margin: 20px 0; 
+    display: flex; 
+    align-items: center;
+    justify-content: center; 
+}
+
+/* Search box styling within the search container */
+.search input[type="text"] {
+    width: 300px;
+    height: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px 0 0 4px;
+    font-size: 16px;
+    font-family: 'PlayfairDisplay-Black';
+}
+
+/* Search button styling within the search container */
+.search input[type="submit"] {
+    padding: 10px 20px; 
+    background-color: #382a33;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border-radius: 0 4px 4px 0;
+    font-family: 'PlayfairDisplay-Black';
+}
+
+/* Hover effect for search button */
+.search input[type="submit"]:hover {
+    background-color: #e3dae1
+}
+
+
+.filters-section {
+    width: 25%;
+    padding: 0;
+}
+
+.cards-section {
+    width: 75%; /* This takes up the remaining width. Adjust based on your requirements */
+    margin: 0;
+    padding: 0;
+}
+
+
+/* Styles the card image to cover the top area*/
+.swiper-slide img, .card-img-top {
+    width: 100%;     
+    height: 350px;
+    display: block;
+    object-fit: cover;
+    object-position: center center;
+}
+
+.swiper-wrapper-outer-container {
+    position: relative;
+    padding: 30px;
+}
+
+.swiper-container {
+    max-height: 400px;
+    overflow: hidden;
+}
+
+  
+
+.main-container {
+    display: flex;
+}
+
+
+.card {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);  /* Adds a light shadow to the card for a subtle lifting effect */
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1); /* Transition effect for hover transformations */
+    border: transparent;
+    border-radius: 10px; /* Rounds the corners of the card */
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin: 0 auto;
+    font-family: 'PlayfairDisplay-Black';
+    flex: 1 0 auto;
+}
+
+/* Enhancing the card's hover effect. */
+.card:hover {
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2); /* Darker shadow on hover for a deeper lift effect */
+    transform: translateY(-5px); /* Moves the card slightly upwards on hover for a dynamic feel */
+}
+
+/* Styling the header of the card. */
+.card-header {
+    background-color: #e3dae1; 
+    color:#292323;
+    font-weight: bold;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    height: 60px;
+    display: block; 
+    justify-content: center; 
+    align-items: center; 
+    white-space: normal;
+    font-family: 'PlayfairDisplay-Black';
+    margin-top: 10px;
+}
+
+/* Styling the links inside the card's body. */
+
+.card-body {
+    flex-grow: 1; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    text-align: left; 
+    min-height: 300px;
+}
+
+.card-body strong {
+    text-align: left;
+    
+}
+
+.capacity {
+    align-self: flex-start;
+}
+
+.card-body input[type="text"],
+.card-body input[type="email"],
+.card-body input[type="tel"],
+.card-body input[type="password"] {
+    width: 100%; 
+    text-align: left; 
+    margin-top: -5px;
+    margin-bottom: 15px;
+}
+
+.row.d-flex.flex-row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 5%;
+}
+
+.card-body a.btn-link {
+    font-size: 15px; 
+    text-decoration: none; 
+    color: #740b5d;
+    text-align: center; 
+}
+
+/* Enhancing the link's hover effect inside the card's body. */
+.card-body a:hover {
+    text-decoration:solid;
+    font-size: 17px;
+    color: #740b5d;  
+    padding-left: 10px;
+}
+
+.booking-title{
+    text-align: center;
+}
+
+.booking {
+    background-color: #e3dae1;
+    border-top: 2px solid #e3dae1;
+    border-bottom: 2px solid #e3dae1;
+    margin-bottom: 20px;
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.booking-header {
+    text-align: center;
+    padding: 10px;
+    background-color: #e3dae1;
+}
+
+.booking-body {
+    background-color: white;
+    padding: 10px;
+    
+}
+
+.booking-body table {
+    width: 100%;
+    border: none; 
+    border-collapse: collapse;
+    justify-content: center; 
+    align-items: center; 
+}
+
+.booking-body td {
+    border: none; 
+    padding: 5px;
+    justify-content: center; 
+    align-items: center; 
+}
+
+.booking-body td:nth-child(1) {
+    font-weight: bold;
+    width: 30%;
+    
+}
+
+.booking-body th:not(:first-child),
+.booking-body td:not(:first-child) {
+    width: 70%;
+    text-indent: -10%;
+}
+
+#bookingTable {
+    border-collapse: collapse;
+    width: 100%;
+    border: 1px solid #e3dae1; 
+}
+
+
+#bookingTable thead {
+    font-weight: bold; 
+    background-color: #e3dae1;
+    height: 40px; 
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+#bookingTable th {
+    border-left: none; 
+    border-right: none; 
+}
+
+#bookingTable tbody tr {
+    border: 1px solid #e3dae1; 
+}
+
+
+#bookingTable td {
+    padding: 8px;
+    border-left: none; 
+    border-right: none; 
+}
+
+
+#bookingTable tbody tr:hover td {
+    background-color: #f3f3f3;
+}
+
+  
+.swiper-wrapper-outer-container {
+    position: relative;
+    padding: 30px;
+}
+
+.swiper-container {
+    max-height: 400px;
+    overflow: hidden;
+}
+
+.swiper-slide img {
+    width: 100%;
+    display: block;
+}
+
+.image-class { 
+    width: 100%; 
+    height: 100%;
+    object-fit: cover; /*  ensure the images resize and cover the area without skewing */
+}
+
+.swiper-container .swiper-button-next, 
+.swiper-container .swiper-button-prev {
+    position: absolute;
+    top: 50%;
+    width: 25px;
+    height: 25px;
+    background-size: 25px 25px;
+    transform: translateY(-50%);
+    
+}
+
+.swiper-container .swiper-button-next {
+    right: -13px !important;
+    color: #382a33;
+    
+}
+
+.swiper-container .swiper-button-prev {
+    left: -13px !important; 
+    color: #382a33;
+    
+}
+
+.swiper-pagination {
+    position: absolute;
+    bottom: -40px !important; 
+    left: 50%; /* Centers the pagination horizontally */
+    transform: translateX(-50%); /* Ensures exact centering */
+    color: #382a33 !important;
+}
+
+.right-container{
+    margin-top: 50px !important;
+    margin-left: 50px !important;
+}
+
+.main-dashboard {
+    max-width: 1200px;
+    margin: 0 auto; /*centering the MAIN container area */
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.left-panel {
+    padding: 20px;
+    border-right: 1px solid #e0e0e0; 
+    display: flex;/* Turn on flexbox */
+    justify-content: space-between; /* Distribute the space between child elements */
+}
+
+.left-panel h2 {
+    margin-top: 0;
+    color: #333; /* Dark gray color for headings */
+    font-size: 1.5em;
+    border-bottom: 2px solid #666; /* Underline for section headers */
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.user-info, .alerts {
+    margin-bottom: 20px;
+    flex:1;
+    margin:0 10px;
+
+}
+
+.center-panel {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.quick-actions ul {
+    list-style-type: none; 
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.quick-actions li {
+    margin: 10px;  /* Spacing between list items */
+    flex: 1;
+}
+
+.quick-actions a{
+    text-decoration: none;
+    font-size: 1em; 
+    color: #333;
+    padding-bottom: 5px;
+    padding-bottom: 5px;
+}
+
+/*Can slide table horizontally if table too wide or on smaller screen*/
+.table-responsive {
+    overflow-x: auto;
+}
+
+.pull-left {
+    float: left;
+  }
+  
+.icon-headernav {
+    color:#382a33;
+    font-size: 16px;
+}
+  
+.button-header {
+    cursor: pointer;
+}
+  
+  
+.notification-dot {
+    height: 6px;
+    width: 6px;
+    background-color: red;
+    border-radius: 50%;
+    border: 1px solid white;
+    display: inline-block;
+    position: relative;
+    top: -8px;
+    left: -8px;
+}
+
+.bg-primary {
+    background-color: #e3dae1 !important; /* !important to ensure it overrides Bootstrap's styles */
+}
+
+.text-custom {
+    color: #382a33 !important;
+}
+
+.main-container {
+    
+    display: flex;
+    flex-direction: row;  /* This will ensure child elements are placed side by side in a row */
+    
+}
+
+.header-section {
+    display: flex;
+    justify-content: space-between;
+    width: 100%; /* takes the full width of its parent */
+    max-width: 800px; /* you can adjust this as needed */
+}
+
+.search-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 800px; 
+}
+
+.search-section form {
+    display: flex;
+    gap: 10px; /* adds some space between the input and the button */
+    width: 100%;
+}
+
+.search-section input {
+    flex: 1; /* allows the input to take all the available space */
+}
+
+.wrapper {
+    display: flex; 
+    flex-direction: column; 
+    min-height: 100%; 
+}
+  
+.content {
+flex: 1; 
+
+}
+
+.footer {
+height: 130px; 
+background-color: #e3dae1;
+text-align: center;
+padding-top: 50px;
+width: 100%;
+}
+  
+
+
+.custom-alert {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    color: #382a33; /* Text color */
+    padding: 10px;
+    border-radius: 5px; /* Rounded corners for the alert */
+}
+
+.checkmark {
+    margin-right: 10px;
+    font-size: 24px; /* Adjust the size of the checkmark */
+    color: green;
+}
+
+.alert-message {
+    text-decoration: underline;
+}
+
+/* Message Container */
+.myflash-messages {
+    background-color: rgb(222, 74, 74);
+    color: antiquewhite;
+    width: 600px;
+  }
+  
+/* Message Items */
+.myflash-message {
+    font-size: 16px;
+    text-align: left; 
+}
+
+.flash-messages{
+    background-color: #e3dae1;
+    color: rgb(4, 2, 0);
+    width: 500px;
+} 
+
+  
+/* Message Items */
+.flash-message {
+    font-size: 16px;
+    text-align: left; 
+}
+
+.venue-textarea {
+    height: 100px;
+}
+
+/* Styling the input group */
+.search-control .input-group {
+    border: 1px transparent;  
+    border-radius: 0.25rem; 
+}
+
+/* Removing the filter button borders and background */
+.search-control .filter-button {
+    border: none;
+    background-color: transparent;
+    color: #495057;  
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+/* Add hover effect for better UX */
+.search-control .filter-button:hover {
+    background-color: rgba(0, 0, 0, 0.075);  
+    cursor: pointer;
+}
+
+.search-control .btn-primary {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.form-columns {
+    display: flex;
+    justify-content: space-between;
+}
+
+.left-column,
+.right-column {
+    width: 48%; 
+    padding: 10px;
+}
+
+.form-input {
+    margin-bottom: 10px;
+}
+
+.calendar-table th {
+    background-color: #f0f0f0;
+    font-weight: bold; 
+    border: 1px solid #000; 
+    padding: 8px; 
+}
+
+.calendar-table td {
+    border: 1px solid #000;
+    padding: 8px;
+}
+
+.cell-status-booked { font-family: 'PlayfairDisplay-Black'; text-align:center; background-color: red; }
+.cell-status-holiday { font-family: 'PlayfairDisplay-Black'; text-align:center; background-color: rgb(232, 242, 205); }
+.cell-status-maintenance { font-family: 'PlayfairDisplay-Black'; text-align:center; background-color: rgb(181, 179, 179); }
+.cell-status-closed { font-family: 'PlayfairDisplay-Black'; text-align:center; background-color: rgb(249, 252, 178); }
+.cell-status-available { font-family: 'PlayfairDisplay-Black'; text-align:center; background-color: rgb(180, 238, 218); }
+
+.flex-container {
+    display: flex;
+    justify-content: space-between; 
+}
+
+.columns {
+    flex: 1;
+    padding: 10px;
+}
+
+
+.calendar-table {
+    border-collapse: collapse; /* Remove cell spacing and merge cell borders */
+    border: 1px solid #000; /* Add an outer border to the table */
+    font-size: 10px; 
+    height: 150px;
+}
+
+.calendar-table th, .calendar-table td {
+    border: 1px solid #000; /* Add borders to each cell */
+    padding: 5px; /* Add some padding for cell content */
+}
+
+/* Remove top and bottom borders for each cell */
+.calendar-table th {
+    border-top: none;
+    border-bottom: none;
+}
+
+/* Remove top and bottom borders for all but the first row (header row) */
+.calendar-table tbody tr td {
+    border-top: none;
+    border-bottom: none;
+}
+
+/* Add a background color to header cells */
+.calendar-table thead th {
+    background-color: #f0f0f0;
+}

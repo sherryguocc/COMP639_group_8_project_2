@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+    <div class="breadcrumb">
+        {% block breadcrumb %}
+        {{ super() }}  
+        <li class="breadcrumb-item"><a href="{{url_for('planner.home')}}">Dashboard</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Generate Report</li>
+        {% endblock %}
+    </div>
+
+    <h3>Generate Reports</h3><br>
+
+    <form method="POST" action="{{ url_for('planner.generate_report') }}">
+        <div class="card-body">
+            
+            <label for="report_type" class="form-label">Report type:</label>
+            <select class="form-control" id="report_type" name="report_type">
+                <option value="workload" default>Workload</option>
+            </select>
+            <small>Choose the type and range or generate with default ranges for the report.</small>
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="starting_date" class="form-label">Time Range From:*</label>
+                    <input type="date" name="starting_date" id="starting_date" style="width: 80%;" required value="2022-01-01">
+                </div>
+                <div class="col-md-3">
+                    <label for="end_date" class="form-label">To:</label>
+                    <input type="date" name="end_date" id="end_date" style="width: 80%;" required value="2024-12-01">
+                </div>
+            <div>
+                <button id="Quarterback" type="button" class="mybutton" >Last Quarterly</button>
+                <button id="HalfYearlyback" type="button" class="mybutton">Last Half-yearly</button>
+                <br><br>
+                <div class="form-group position-relative">
+                    <input type="radio" id="export_pdf" name="export_pdf" value="pdf"  style="margin-left: -38%;">
+                    <label for="export_pdf" style="display: inline; margin-left:-37%;">Generate PDF</label>
+                </div>
+                <br><a href="/planner/get_report"><button class="button">Generate New Report</button></a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.getElementById('Quarterback').addEventListener('click', function() {
+        var today = new Date();
+        var year = today.getFullYear();
+        var month = (today.getMonth() + 1).toString().padStart(2, '0');
+        var day = today.getDate().toString().padStart(2, '0');
+        var todayDate = year + '-' + month + '-' + day;
+        var quarterDate = new Date(today);
+        quarterDate.setDate(today.getDate() - 90);
+        var qyear = quarterDate.getFullYear()
+        var qmonth = (quarterDate.getMonth() + 1).toString().padStart(2, '0');
+        var qday = quarterDate.getDate().toString().padStart(2, '0');
+        var qDate = qyear + '-' + qmonth + '-' + qday
+        document.getElementById('end_date').value = todayDate;
+        document.getElementById('starting_date').value = qDate;
+    });
+</script>
+<script>
+    document.getElementById('HalfYearlyback').addEventListener('click', function() {
+        var today = new Date();
+        var year = today.getFullYear();
+        var month = (today.getMonth() + 1).toString().padStart(2, '0');
+        var day = today.getDate().toString().padStart(2, '0');
+        var todayDate = year + '-' + month + '-' + day;
+        var hyDate = new Date(today);
+        hyDate.setDate(today.getDate() - 182);
+        var hyear = hyDate.getFullYear()
+        var hmonth = (hyDate.getMonth() + 1).toString().padStart(2, '0');
+        var hday = hyDate.getDate().toString().padStart(2, '0');
+        var hDate = hyear + '-' + hmonth + '-' + hday
+        document.getElementById('end_date').value = todayDate;
+        document.getElementById('starting_date').value = hDate;
+});
+</script>
+
+{% endblock %}
+

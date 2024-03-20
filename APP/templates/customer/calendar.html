@@ -1,0 +1,598 @@
+{% if request.path == '/' %}  
+<div class="container">
+    <div class = "breadcrumb">
+        {% block breadcrumb %}
+        {{ super() }}  
+        <li class="breadcrumb-item"><a href="{{url_for('customer.home')}}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{url_for('customer.venue_list')}}">Venue List</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Calendar</li>
+        {% endblock %}
+    </div>
+    <h2>Availability Table for {{ venue.venueName }} (Venue ID: {{ venue.get_venueID}})</h2><br>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flash-messages">
+                {% for message in messages %}
+                    <li class="flash-message">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    <div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0);" id="previousWeek">Previous Week</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0);" id="currentWeek">Current Week</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0);" id="nextWeek">Next Week</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <div>
+        <table class="calendar-table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th id="date1"></th>
+                    <th id="date2"></th>
+                    <th id="date3"></th>
+                    <th id="date4"></th>
+                    <th id="date5"></th>
+                    <th id="date6"></th>
+                    <th id="date7"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="time0">00:00 - 01:00</td>
+                    <td id="cell0-0"></td>
+                    <td id="cell0-1"></td>
+                    <td id="cell0-2"></td>
+                    <td id="cell0-3"></td>
+                    <td id="cell0-4"></td>
+                    <td id="cell0-5"></td>
+                    <td id="cell0-6"></td>
+                    
+                    
+                </tr>
+                <tr>
+                    <td id="time1">01:00 - 02:00</td>
+                    <td id="cell1-0"></td>
+                    <td id="cell1-1"></td>
+                    <td id="cell1-2"></td>
+                    <td id="cell1-3"></td>
+                    <td id="cell1-4"></td>
+                    <td id="cell1-5"></td>
+                    <td id="cell1-6"></td>
+                </tr>
+                <tr>
+                    <td id="time2">02:00 - 03:00</td>
+                    <td id="cell2-0"></td>
+                    <td id="cell2-1"></td>
+                    <td id="cell2-2"></td>
+                    <td id="cell2-3"></td>
+                    <td id="cell2-4"></td>
+                    <td id="cell2-5"></td>
+                    <td id="cell2-6"></td>
+                </tr>
+                <tr>
+                    <td id="time3">03:00 - 04:00</td>
+                    <td id="cell3-0"></td>
+                    <td id="cell3-1"></td>
+                    <td id="cell3-2"></td>
+                    <td id="cell3-3"></td>
+                    <td id="cell3-4"></td>
+                    <td id="cell3-5"></td>
+                    <td id="cell3-6"></td>
+                </tr>
+                <tr>
+                    <td id="time4">04:00 - 05:00</td>
+                    <td id="cell4-0"></td>
+                    <td id="cell4-1"></td>
+                    <td id="cell4-2"></td>
+                    <td id="cell4-3"></td>
+                    <td id="cell4-4"></td>
+                    <td id="cell4-5"></td>
+                    <td id="cell4-6"></td>
+                </tr>
+                <tr>
+                    <td id="time5">05:00 - 06:00</td>
+                    <td id="cell5-0"></td>
+                    <td id="cell5-1"></td>
+                    <td id="cell5-2"></td>
+                    <td id="cell5-3"></td>
+                    <td id="cell5-4"></td>
+                    <td id="cell5-5"></td>
+                    <td id="cell5-6"></td>
+                </tr>
+                <tr>
+                    <td id="time6">06:00 - 07:00</td>
+                    <td id="cell6-0"></td>
+                    <td id="cell6-1"></td>
+                    <td id="cell6-2"></td>
+                    <td id="cell6-3"></td>
+                    <td id="cell6-4"></td>
+                    <td id="cell6-5"></td>
+                    <td id="cell6-6"></td>
+                </tr>
+                <tr>
+                    <td id="time7">07:00 - 08:00</td>
+                    <td id="cell7-0"></td>
+                    <td id="cell7-1"></td>
+                    <td id="cell7-2"></td>
+                    <td id="cell7-3"></td>
+                    <td id="cell7-4"></td>
+                    <td id="cell7-5"></td>
+                    <td id="cell7-6"></td>
+                </tr>
+                <tr>
+                    <td id="time8">08:00 - 09:00</td>
+                    <td id="cell8-0"></td>
+                    <td id="cell8-1"></td>
+                    <td id="cell8-2"></td>
+                    <td id="cell8-3"></td>
+                    <td id="cell8-4"></td>
+                    <td id="cell8-5"></td>
+                    <td id="cell8-6"></td>
+                </tr>
+                <tr>
+                    <td id="time9">09:00 - 09:00</td>
+                    <td id="cell9-0"></td>
+                    <td id="cell9-1"></td>
+                    <td id="cell9-2"></td>
+                    <td id="cell9-3"></td>
+                    <td id="cell9-4"></td>
+                    <td id="cell9-5"></td>
+                    <td id="cell9-6"></td>
+                </tr>
+                <tr>
+                    <td id="time10">10:00 - 11:00</td>
+                    <td id="cell10-0"></td>
+                    <td id="cell10-1"></td>
+                    <td id="cell10-2"></td>
+                    <td id="cell10-3"></td>
+                    <td id="cell10-4"></td>
+                    <td id="cell10-5"></td>
+                    <td id="cell10-6"></td>
+                </tr>
+                <tr>
+                    <td id="time11">11:00 - 12:00</td>
+                    <td id="cell11-0"></td>
+                    <td id="cell11-1"></td>
+                    <td id="cell11-2"></td>
+                    <td id="cell11-3"></td>
+                    <td id="cell11-4"></td>
+                    <td id="cell11-5"></td>
+                    <td id="cell11-6"></td>
+                </tr>
+                <tr>
+                    <td id="time12">12:00 - 13:00</td>
+                    <td id="cell12-0"></td>
+                    <td id="cell12-1"></td>
+                    <td id="cell12-2"></td>
+                    <td id="cell12-3"></td>
+                    <td id="cell12-4"></td>
+                    <td id="cell12-5"></td>
+                    <td id="cell12-6"></td>
+                </tr>
+                <tr>
+                    <td id="time13">13:00 - 14:00</td>
+                    <td id="cell13-0"></td>
+                    <td id="cell13-1"></td>
+                    <td id="cell13-2"></td>
+                    <td id="cell13-3"></td>
+                    <td id="cell13-4"></td>
+                    <td id="cell13-5"></td>
+                    <td id="cell13-6"></td>
+                </tr>
+                <tr>
+                    <td id="time14">14:00 - 14:00</td>
+                    <td id="cell14-0"></td>
+                    <td id="cell14-1"></td>
+                    <td id="cell14-2"></td>
+                    <td id="cell14-3"></td>
+                    <td id="cell14-4"></td>
+                    <td id="cell14-5"></td>
+                    <td id="cell14-6"></td>
+                </tr>
+                <tr>
+                    <td id="time15">15:00 - 16:00</td>
+                    <td id="cell15-0"></td>
+                    <td id="cell15-1"></td>
+                    <td id="cell15-2"></td>
+                    <td id="cell15-3"></td>
+                    <td id="cell15-4"></td>
+                    <td id="cell15-5"></td>
+                    <td id="cell15-6"></td>
+                </tr>
+                <tr>
+                    <td id="time16">16:00 - 17:00</td>
+                    <td id="cell16-0"></td>
+                    <td id="cell16-1"></td>
+                    <td id="cell16-2"></td>
+                    <td id="cell16-3"></td>
+                    <td id="cell16-4"></td>
+                    <td id="cell16-5"></td>
+                    <td id="cell16-6"></td>
+                </tr>
+                <tr>
+                    <td id="time17">17:00 - 18:00</td>
+                    <td id="cell17-0"></td>
+                    <td id="cell17-1"></td>
+                    <td id="cell17-2"></td>
+                    <td id="cell17-3"></td>
+                    <td id="cell17-4"></td>
+                    <td id="cell17-5"></td>
+                    <td id="cell17-6"></td>
+                </tr>
+                <tr>
+                    <td id="time18">18:00 - 19:00</td>
+                    <td id="cell18-0"></td>
+                    <td id="cell18-1"></td>
+                    <td id="cell18-2"></td>
+                    <td id="cell18-3"></td>
+                    <td id="cell18-4"></td>
+                    <td id="cell18-5"></td>
+                    <td id="cell18-6"></td>
+                </tr>
+                <tr>
+                    <td id="time19">19:00 - 20:00</td>
+                    <td id="cell19-0"></td>
+                    <td id="cell19-1"></td>
+                    <td id="cell19-2"></td>
+                    <td id="cell19-3"></td>
+                    <td id="cell19-4"></td>
+                    <td id="cell19-5"></td>
+                    <td id="cell19-6"></td>
+                </tr>
+                <tr>
+                    <td id="time20">20:00 - 21:00</td>
+                    <td id="cell20-0"></td>
+                    <td id="cell20-1"></td>
+                    <td id="cell20-2"></td>
+                    <td id="cell20-3"></td>
+                    <td id="cell20-4"></td>
+                    <td id="cell20-5"></td>
+                    <td id="cell20-6"></td>
+                </tr>
+                <tr>
+                    <td id="time21">21:00 - 22:00</td>
+                    <td id="cell21-0"></td>
+                    <td id="cell21-1"></td>
+                    <td id="cell21-2"></td>
+                    <td id="cell21-3"></td>
+                    <td id="cell21-4"></td>
+                    <td id="cell21-5"></td>
+                    <td id="cell21-6"></td>
+                </tr>
+                <tr>
+                    <td id="time22">22:00 - 23:00</td>
+                    <td id="cell22-0"></td>
+                    <td id="cell22-1"></td>
+                    <td id="cell22-2"></td>
+                    <td id="cell22-3"></td>
+                    <td id="cell22-4"></td>
+                    <td id="cell22-5"></td>
+                    <td id="cell22-6"></td>
+                </tr>
+                <tr>
+                    <td id="time23">23:00 - 00:00</td>
+                    <td id="cell23-0"></td>
+                    <td id="cell23-1"></td>
+                    <td id="cell23-2"></td>
+                    <td id="cell23-3"></td>
+                    <td id="cell23-4"></td>
+                    <td id="cell23-5"></td>
+                    <td id="cell23-6"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    {% block javascript %}
+    <script>
+       // Extract data_dict from the background, including calendar information corresponding to the venue_id of all changed pages
+       var data_dict = {{ calendar_dict | safe }};
+       console.log(data_dict);
+
+        //////////////////////////////The following is the page turning + changing header function////////////// //////////////
+        document.addEventListener("DOMContentLoaded", function() {
+            // JavaScript code to populate the date and display the day of the week by default
+            const today = new Date();
+            const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+            //Initialize date range (default shows this week)
+            let currentDate = new Date();
+            let startOfWeek = new Date(currentDate);
+            startOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
+            let endOfWeek = new Date(currentDate);
+            endOfWeek.setDate(currentDate.getDate() + (6 - currentDate.getDay()));
+
+            //Update date display
+            for (let i = 0; i < 7; i++) {
+                const day = new Date(startOfWeek);
+                day.setDate(startOfWeek.getDate() + i);
+                const dateCell = document.getElementById(`date${i + 1}`);
+                dateCell.textContent = `${days[day.getDay()]} ${day.toLocaleDateString()}`;
+            }
+
+            //Handle button click event
+            document.getElementById('previousWeek').addEventListener('click', function () {
+                //switch to previous week
+                clearTable(); // Clear the table first
+                startOfWeek.setDate(startOfWeek.getDate() - 7);
+                endOfWeek.setDate(endOfWeek.getDate() - 7);
+                updateDateCells(); // Update cell status
+                fillCells(data_dict); // Update cell status
+            });
+
+            document.getElementById('nextWeek').addEventListener('click', function () {
+                //switch to next week
+                clearTable(); // Clear the table first
+                let startDate = new Date();
+                startOfWeek.setDate(startOfWeek.getDate() + 7);
+                endOfWeek.setDate(endOfWeek.getDate() + 7);
+                updateDateCells();
+                // Check if legacy data exists
+                // Get remain_data
+                const storedData = localStorage.getItem('remain_data');
+                if (storedData) {
+                    const remain_data = JSON.parse(storedData);
+                    if (!remain_data.isProcessed) {
+                        fillRemainingData(remain_data);
+                        remain_data.isProcessed = true;
+                        localStorage.setItem('remain_data', JSON.stringify(remain_data));
+                    }
+                }
+            
+                fillCells(data_dict); // Update cell status
+            });
+
+            document.getElementById('currentWeek').addEventListener('click', function () {
+                // Back to this week
+                clearTable(); // Clear the table first
+                const currentDate = new Date();
+                startOfWeek = new Date(currentDate);
+                startOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
+                endOfWeek = new Date(currentDate);
+                endOfWeek.setDate(currentDate.getDate() + (6 - currentDate.getDay));
+                updateDateCells();
+                fillCells(data_dict); // Update cell status
+            });
+
+            //Update date grid
+            function updateDateCells() {
+                for (let i = 0; i < 7; i++) { //i from 0-6
+                    const day = new Date(startOfWeek);//Set the day variable to the start date of this week
+                    day.setDate(startOfWeek.getDate() + i);//Increase the date by one day each time it loops
+                    const dateCell = document.getElementById(`date${i + 1}`);//Find the id of the header cell where the date needs to be set, which is date1-date7
+                    dateCell.textContent = `${days[day.getDay()]} ${day.toLocaleDateString()}`;//Set the content of the cell as: week + date
+                }
+            }
+            //Clear table content
+            function clearTable() {
+                for (let i = 0; i < 7; i++) {
+                    for (let hour = 0; hour < 24; hour++) {
+                        const cell = document.getElementById(`cell${hour}-${i}`);
+                        cell.textContent = ''; // Clear cell content
+                        cell.className = ''; // Clear cell style
+                    }
+                }
+            }
+            ///////////////////////////////The above is the page turning + changing header function////////////// //////////////
+
+            ////////////////////////////以下是更新单元格内容功能//////////////////////////
+            // 设置单元格状态样式和内容
+            function setStatus(cell, status) {
+                let statusText = ''; // 初始化状态文字为空字符串
+
+                if (status === 'Booked') {
+                    cell.classList.add('cell-status-booked');
+                    statusText = 'Booked'; // 设置文字内容为 "Booked"
+                } else if (status === 'Holiday') {
+                    cell.classList.add('cell-status-holiday');
+                    statusText = 'Holiday'; // 设置文字内容为 "Holiday"
+                } else if (status === 'Maintenance') {
+                    cell.classList.add('cell-status-maintenance');
+                    statusText = 'Maintenance'; // 设置文字内容为 "Maintenance"
+                } else if (status === 'Closed') {
+                    cell.classList.add('cell-status-closed');
+                    statusText = 'Closed'; // 设置文字内容为 "Closed"
+                } else if (status === 'Available') {
+                    // Handle "Available" status here
+                    // For "Available" status, leave the cell blank and don't change the class
+                    cell.textContent = '';
+                    cell.className = '';
+                }
+
+                cell.textContent = statusText; // 设置单元格的文字内容
+            }
+
+            // 定义一个函数，将数字日期转换为 JavaScript 可理解的日期对象
+            function convertNumberToDate(numberDate) {
+                // 提取年、月、日部分
+                const year = Math.floor(numberDate / 10000);
+                const month = Math.floor((numberDate % 10000) / 100) - 1; // 月份从 0 到 11
+                const day = numberDate % 100;
+
+                // 创建日期对象
+                const dateObject = new Date(year, month, day);
+
+                return dateObject;
+            }
+
+            // 定义一个函数，将数字时间转换为 JavaScript 可理解的时间对象
+            function convertNumberToTime(numberTime) {
+                // 提取小时、分钟和秒部分
+                const hours = Math.floor(numberTime / 3600);
+                const minutes = Math.floor((numberTime % 3600) / 60);
+                const seconds = numberTime % 60;
+
+                // 创建时间对象
+                const timeObject = new Date(0, 0, 0, hours, minutes, seconds);
+
+                return timeObject;
+            }
+            
+            // 通过找到对应数据来填充单元格的功能
+            function fillCells(data) {
+                data.forEach(function(entry) {
+                    // 提取日期和时间的数字部分
+                    const original_start_date = entry['start_date'];
+                    const original_end_date = entry['end_date'];
+                    const original_start_time = entry['start_time'];
+                    const original_end_time = entry['end_time'];
+                    const data_id = entry['calendar_id'];
+
+                    // 转换为 JavaScript 可理解的日期和时间格式
+                    const startDate = convertNumberToDate(original_start_date);
+                    const startTime = convertNumberToTime(original_start_time);
+                    const endDate = convertNumberToDate(original_end_date);
+                    const endTime = convertNumberToTime(original_end_time);
+
+                    // 找到开始和结束时间的hour time
+                    const startHour = startTime.getHours();
+                    const endHour = endTime.getHours();
+
+                    // 找到startDate所在列的Index
+                    const columnIndex = findStartDateIndex(startDate);
+
+                    // 如果能找到Index，说明有数据在本周，如果找不到就说明没有
+                    if (columnIndex !== -1) {
+                        if (endDate.getTime()> endOfWeek.getTime()) {// 如果endDate不在本周范围内，需要把数据留存到下一周
+                            // 获取没有更新完的数据信息
+                            const remain_data = remainData(data_id)
+                            localStorage.setItem('remain_data', JSON.stringify(remain_data));
+                            }
+                        let hourRange;
+
+                        // 如果startDate和endDate在同一天，则填充当天对应的时间单元格
+                        if (startDate.getTime() === endDate.getTime()) {
+                            hourRange = getHourRange(startHour, endHour);
+                            fillCellRange(columnIndex, hourRange, entry['status']);
+                        } else if (startDate!== endDate) {
+                            let currentDate = new Date(startDate);//设置一个currentDate变量，赋予初始值为startDate
+                            while (currentDate.getTime() < endDate.getTime()) {
+                                // 首先填充第一天
+                                hourRange = getHourRange(startHour, 23);
+                                fillCellRange(columnIndex, hourRange, entry['status']);
+                                currentDate.setDate(currentDate.getDate() + 1); // 填充之后来到后面一天
+                                let Index = columnIndex + 1; // 对应的索引也要加1
+                                // 如果日期不是endDate，代表还没有到达endDate那天，填充整天
+                                if (currentDate.getTime()!== endDate.getTime()) {
+                                    hourRange = getHourRange(0, 23);
+                                    fillCellRange(Index, hourRange, entry['status']);
+                                    currentDate.setDate(currentDate.getDate() + 1); // 填充之后来到后面一天
+                                    Index = Index + 1; // 对应的索引也要加1
+                                } else if (currentDate.getTime() === endDate.getTime()) { // 到达了endDate那一天
+                                    // 当前日期是endDate，只处理一次
+                                    if(Index < 7){//如果最后一天还在本周范围内，就填充最后一天
+                                        hourRange = getHourRange(0, endHour);
+                                        fillCellRange(Index, hourRange, entry['status']);
+                                    }
+                                }
+                            } 
+                        }
+                    }
+                });
+            }
+
+            function remainData(dataID) {
+                for (const entry of data_dict) {
+                    const data_id = entry['calendar_id'];
+                    if (data_id === dataID) {
+                        return entry;
+                    }
+                }
+            }
+
+            // 找到startDate所在列的Index
+            function findStartDateIndex(startDate) {
+                for (let i = 1; i <= 7; i++) {
+                    const dateCell = document.getElementById(`date${i}`);
+                    const dateText = dateCell.textContent.split(' ')[1];
+                    const date = new Date(dateText);
+                    if (date.getTime() === startDate.getTime()) {
+                        return i-1; //因为表头是从date1开始的，但是单元格是从0开始的，所以这里要减1
+                    }
+                }
+                return -1; // 如果未找到，返回-1
+            }
+
+            // 获取开始时间和结束时间之间的小时范围
+            function getHourRange(startHour, endHour) {
+                const hourRange = [];
+                for (let hour = startHour; hour <= endHour; hour++) {
+                    hourRange.push(hour);
+                }
+                return hourRange;
+            }
+
+            // 填充指定日期和小时范围内的单元格
+            function fillCellRange(dayIndex, hourRange, status) {
+                for (let hour of hourRange) {
+                    const statusCell = document.getElementById(`cell${hour}-${dayIndex}`);
+                    setStatus(statusCell, status);
+                }
+            }
+            
+            //这个功能用来处理上一周遗留下来的数据
+            function fillRemainingData(remain_data) {
+                let status = remain_data['status'];
+                const currentDate = new Date();
+                // 在这里使用全局的 startOfWeek
+   
+                //获取遗留数据中需要用到的数据
+                const originalEndDate = remain_data['end_date'];
+                const originalEndTime = remain_data['end_time'];
+
+                //转换这些数据为JavaScript可以处理的日期和时间
+                const endDate = convertNumberToDate(originalEndDate);
+                const endTime = convertNumberToTime(originalEndTime);
+
+                // 找到结束时间的hour time
+                const endHour = endTime.getHours();
+
+                const currentStartOfWeek = new Date(startOfWeek);
+                currentStartOfWeek.setHours(0, 0, 0, 0);
+
+                // 确认 endDate 是否在当前周
+                if (endDate.getTime() >= currentStartOfWeek.getTime() && endDate.getTime() <= endOfWeek.getTime()) {
+                    // 找到结束日期所在的列
+                    let columnIndex = findStartDateIndex(endDate);
+                    let hourRange;
+                    let currentDate = new Date(currentStartOfWeek);
+                    while (currentDate.getTime() <= endDate.getTime()) {
+                        if (currentDate.getTime() !== endDate.getTime()) {
+                            hourRange = getHourRange(0, 23);
+                        } else {
+                            hourRange = getHourRange(0, endHour);
+                        }
+                        fillCellRange(columnIndex, hourRange, status);
+                        currentDate.setDate(currentDate.getDate() + 1);
+                        columnIndex++;
+                    }
+                } 
+            }
+
+            // 用后台数据填充前台单元格
+            fillCells(data_dict);
+
+            // 初始化或切换日期后，可以根据日期范围获取状态并更新表格
+            updateDateCells();
+        });
+    </script>
+    {% endblock %}
+</div>
+{% endif %}

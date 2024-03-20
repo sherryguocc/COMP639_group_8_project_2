@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    
+<div class="container">
+
+    <div class = "breadcrumb">
+        {% block breadcrumb %}
+        {{ super() }}  
+        <li class="breadcrumb-item"><a href="{{url_for('admin.home')}}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{url_for('admin.venue_list')}}">Venue List</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Venue Search Results</li>
+        {% endblock %}
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class="flash-messages">
+        {% for message in messages %}
+        <li class="flash-message">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+    
+    {% if venues %}
+    <h2>Search Results</h2>
+    <a class="button" href="{{ url_for('admin.venue_list') }}">Back</a><br><br>
+
+    <!-- Row for organizing search result cards -->
+    <div class="row">
+        {% for venue in venues %}
+        <div class="col-12 col-md-3">
+            <div class="card">
+                {% if venue.image_content %}
+                    <img src ="{{ venue.image_content[0]}}" class="card-img-top" alt="Image of {{ venue.get_venueName }}">
+                {% endif %} 
+                <div class="card-body">
+                    <h5 class="card-title">{{ venue.get_venueName }}</h5>
+
+                    <div class="status-and-button">
+                        <p class="status-text {% if venue.is_active %}text-success{% else %}text-danger{% endif %}">Status: {% if venue.is_active %}<span>Active</span>{% else %}<span>Inactive</span>{% endif %}</p>
+                        <form method="POST" action="{{ url_for('admin.change_venue_status', venue_id=venue.get_venueID) }}">
+                            <button type="submit" class="{% if venue.is_active %}btn btn-secondary{% else %}btn btn-light{% endif %}" style="width:150px;">
+                                {% if venue.is_active %}
+                                Deactivate
+                                {% else %}
+                                Activate
+                                {% endif %}
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class = "form-group">
+                        <p class="card-text"><strong>Event Area:</strong> {{ venue.get_eventArea }}</p>
+                        <p class="card-text"><strong>Capacity:</strong> {{ venue.get_maxCapacity }}</p>
+                        <p class="card-text"><strong>Location:</strong> {{ venue.get_location }}</p>
+                    </div>  
+                    <hr>
+                    
+                    <a href="{{ url_for('admin.edit_venue', venue_id=venue.get_venueID) }}" class="button mt-2">Edit Venue</a>
+                    <a href="{{ url_for('admin.admin_delete_venue', venue_id=venue.get_venueID) }}" class="button mt-2">Delete</a>
+                    <a class="button mt-2" href="{{ url_for('admin.venue_calendar', venue_id=venue.get_venueID) }}">Calendar</a>
+                    
+                </div>
+                
+                
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+
+{% endblock %}

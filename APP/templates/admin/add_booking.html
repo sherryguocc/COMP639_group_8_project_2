@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+
+    <div class = "breadcrumb">
+        {% block breadcrumb %}
+        {{ super() }}  
+        <li class="breadcrumb-item"><a href="{{url_for('admin.home')}}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{url_for('admin.view_customer')}}">Customer List</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Book Venue</li>
+        {% endblock %}
+    </div>
+
+    
+    <!-- Display Flash Messages if Available -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class="flash-messages">
+        {% for message in messages %}
+        <li class="flash-message">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+    
+    <h2>Book a Venue</h2>
+    <form action="{{url_for('admin.book_venue', customerID=customerID)}}" method="post">
+        <!-- Venue Dropdown -->
+        <div class="form-group">
+            <label for="venueID">Choose Venue:</label>
+            <select class="form-control" name="venueID" required>
+                {% for venue in venues %}
+                    <option value="{{ venue.get_venueID }}">{{ venue.get_venueName }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Decoration Dropdown -->
+        <div class="form-group">
+            <label for="decoration">Decoration:</label>
+            <select class="form-control" name="decoration">
+                <option value="">None</option>
+                {% for decor in decoration %}
+                    <option value="{{ decor[0] }}">{{ decor[1]}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <!-- Food Menu Tabs and Content Section -->
+        <div class="tab-container">
+            {% for item in menus %}
+            <div class="tab" data-id="menu{{ item.index }}" onclick="showMenu(this)">{{ item.menu[1] }}</div>
+            {% endfor %}
+        </div>
+        
+        <!-- Contents of each food menu -->
+        {% for item in menus %}
+        <div class="menu-content" data-id="menu{{ item.index }}">
+           <a href="{{ url_for('static', filename=item[3]) }}" data-lightbox="menu{{ loop.index }}">
+                <img src="{{ url_for('static', filename=item.menu[3]) }}" alt="{{ item.menu[1] }}" />
+           </a><br><br>
+            
+           <p>{{ item.menu[4] }}</p>
+        </div>
+        {% endfor %}
+        
+        
+        <!-- Food Options -->
+        <label for="food">Choose a Food Menu (Optional):</label>
+        <select id="food" name="food">
+            <option value="">None</option>
+            {% for menu in food_menu %}
+                <option value="{{ menu[0]}}">{{ menu[1] }}</option>
+            {% endfor %}
+        </select><br> 
+
+        <!-- Event Start/End Date and Time -->
+        <div class="form-group">
+            <label for="startDate">Event Start Date:</label>
+            <input type="date" class="form-control" name="startDate" required>
+            
+            <label for="startTime">Event Start Time:</label>
+            <input type="time" class="form-control" name="startTime" required>
+
+            <label for="endDate">Event End Date:</label>
+            <input type="date" class="form-control" name="endDate" required>
+
+            <label for="endTime">Event End Time:</label>
+            <input type="time" class="form-control" name="endTime" required>
+        </div>
+
+        <!-- Number of Guests -->
+        <div class="form-group">
+            <label for="guestsNumber">Number of Guests:</label>
+            <input type="number" class="form-control" name="guestsNumber" required>
+        </div>
+
+        <!-- Event Details -->
+        <div class="form-group">
+            <label for="comments">Event Details/Comments:</label>
+            <textarea class="form-control" name="comments" rows="4"></textarea>
+        </div>
+
+        <button type="submit" class="button">Book Venue</button>
+    </form>
+</div>
+
+<script>
+    
+    // Initial functionality once the window loads
+    window.onload = function() {
+    const firstTab = document.querySelector('.tab');
+    if (firstTab) {
+        showMenu(firstTab);
+    }
+};
+
+    // Function to toggle between different food menus
+    function showMenu(element) {
+        // Use the data-id attribute to get the unique identifier for the clicked menu.
+        const menuId = element.getAttribute('data-id');
+
+        // Select all elements with the class 'menu-content'.
+        const menuContents = document.querySelectorAll('.menu-content');
+        menuContents.forEach(content => {
+            // Use the data-id attribute to compare the ids.
+            if (content.getAttribute('data-id') === menuId) {
+                // Add the active-content class to the matched content.
+                content.classList.add('active-content');
+            } else {
+                // Remove the active-content class from other contents.
+                content.classList.remove('active-content');
+            }
+        });
+
+        // Select all elements with the class 'tab'.
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            // Add the active class to the clicked tab and remove from others.
+            tab.classList[element === tab ? 'add' : 'remove']('active');
+        });
+    }
+
+</script>
+{% endblock %}

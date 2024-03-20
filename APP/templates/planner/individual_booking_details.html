@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+
+    <div class="breadcrumb">
+        {% block breadcrumb %}
+        {{ super() }}  
+        <li class="breadcrumb-item"><a href="{{url_for('planner.home')}}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{url_for('planner.view_bookings')}}">Bookings</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Booking</li>
+        {% endblock %}
+    </div>
+
+    <div style="text-align: center;">
+        <h2 style="position: relative;">Booking Details</h2>
+        <p>BookingID: {{booking[0]}} | Booking Status: <strong style="color: red;">{{booking[14]}}</strong></p>
+    </div>
+<br>
+    <div class="booking">
+        <div class="booking-header">
+            <h5>Event Details</h5>
+        </div>
+        <div class="booking-body">
+            <table class="table table-hover rounded-table" >
+                <tr>
+                    <td>Event Start Date & Time</td>
+                    <td>{{booking[9].strftime('%d-%m-%Y')}} {{booking[10]}}</td>
+                </tr>
+                <tr>
+                    <td>Event End Date & Time</td>
+                    <td>{{booking[11].strftime('%d-%m-%Y')}} {{booking[12]}}</td>
+                </tr>
+                <tr>
+                    <td>Venue Name</td>
+                    <td>{{booking[5]}}</td>
+                </tr>
+                <tr>
+                    <td>Venue Location</td>
+                    <td>{{booking[6]}}</td>
+                </tr>
+                <tr>
+                    <td>Guest Number</td>
+                    <td>{{booking[13]}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+<br>
+    <div class="booking">
+        <div class="booking-header">
+            <h5>Additional Service</h5>
+        </div>
+        <div class="booking-body">
+            <table class="table table-hover rounded-table" >
+                <tr>
+                    <td>Food Order</td>
+                    <td>{{booking[7]  or 'N/A'}}</td>
+                </tr>
+                <tr>
+                    <td>Decoration Order</td>
+                    <td>{{booking[8]  or 'N/A'}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+<br>
+    <div class="booking">
+        <div class="booking-header">
+            <h5>Customer Details</h5>
+        </div>
+        <div class="booking-body">
+            <table class="table table-hover rounded-table" >
+                <tr>
+                    <td>Customer Name</td>
+                    <td>{{booking[2]}}</td>
+                </tr>
+                <tr>
+                    <td>Phone Number</td>
+                    <td>{{booking[3]}}</td>
+                </tr>
+                <tr>
+                    <td>Email Address</td>
+                    <td>{{booking[4]}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+<br>
+    <div class="booking">
+        <div class="booking-header">
+            <h5>Comments</h5>
+        </div>
+        <div class="booking-body">
+            <table class="table table-hover rounded-table" >
+                <tr>
+                    <td style="width: 10%;"></td>
+                    <td>{{booking[15] or 'N/A'}}</td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+    <br>
+ 
+        
+    <form method="post" action="{{ url_for('planner.individual_booking_details', booking_id=booking_id) }}">
+        <div class="form-group position-relative">
+            <input type="radio" id="export_method" name="export_method" value="pdf" style="margin-left: 5px;">
+            <label for = "export_method" style="display: inline; margin-left: -50%;"> Generate PDF </label>
+        </div>
+
+        <div class="btn-toolbar justify-content-center">
+            <input type="submit" value="Export" class="btn w-50 w-lg-25" style="margin-bottom: 15px; padding: 8px; background-color: #382a33;">
+        </div>
+    </form>
+</div>
+
+{% endblock %}

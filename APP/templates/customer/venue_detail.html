@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class = "container">
+    <div class="breadcrumb">
+        {% block breadcrumb %}
+        {{ super() }}  
+        <li class="breadcrumb-item"><a href="{{url_for('customer.home')}}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{url_for('customer.view_venue', venueID = venueID)}}">Venue List</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Venue Detail</li>
+        {% endblock %}
+    </div>
+    <div class="row">
+        <div class="col-lg-7">
+            <!-- Display Selected Venue Details -->
+            <h2>{{ venue.get_venueName }}</h2>
+
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="flash-messages">
+                    {% for message in messages %}
+                        <li class="flash-message">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+            <div class = "swiper-wrapper-outer-container">
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        {% for image_url in venue.image_content %}
+                        <div class="swiper-slide">
+                            <img src="{{ image_url }}" alt="Venue Image" class="image-class">
+                        </div>
+                        {% endfor %}
+                    </div>
+    
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="col-lg-5">
+            <div class="right-container">
+                <p><strong>Location:</strong> {{ venue.get_location }}</p>
+                <p><strong>Event Area:</strong> {{ venue.get_eventArea }} metre square</p>
+                <p><strong>Max Capacity:</strong> {{ venue.get_maxCapacity }}</p>
+                <p><strong>Hire Per Day:</strong> {{ venue.get_dailyPrice }}</p>
+                <p><strong>Hire (Hourly Rate):</strong> {{ venue.get_hourlyPrice }}</p>
+                <p><strong>Description:</strong> {{ venue.get_description }}</p><br>
+
+                <a href = "{{url_for('customer.book_venue', venueID = venue.get_venueID )}}" class = "button">Book</a>
+            </div>
+            
+        </div>
+    </div>
+
+    
+</div>
+
+<script>
+        const swiper = new Swiper('.swiper-container', {
+        pagination: {
+            el: '.swiper-pagination',
+            type: 'bullets',
+            clickable: true
+        },
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+    });
+</script>
+
+{% endblock %}

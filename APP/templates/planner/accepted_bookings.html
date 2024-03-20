@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+
+    <div class = "breadcrumb">
+        {% block breadcrumb %}
+        {{ super() }}  
+        <li class="breadcrumb-item"><a href="{{url_for('planner.home')}}">Dashboard</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Accepted Bookings</li>
+        {% endblock %}
+    </div>
+
+
+    <h2>Accepted Bookings</h2>
+
+    {% if accepted_bookings %}
+    <!-- Table for Displaying Accepted Bookings -->
+    <table class="table table-bordered table-hover rounded-table">
+        <thead style="background-color: #e3dae1; color: #382a33;">
+            <!-- Table Header Row -->
+            <tr>
+                <th>Customer</th>
+                <th>Venue</th>
+                <th>Venue Location</th>
+                <th>Start Date</th>
+                <th>Start Time</th>
+                <th>End Date</th>
+                <th>End Time</th>
+                <th>Guests</th>
+                <th>Create Quote</th>
+                <th>View Quote</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+                {% for booking in accepted_bookings %}
+                <!-- Loop through Accepted Bookings and Display Details -->
+                <tr>
+                    <td>{{ booking[0] }}</td>
+                    <td>{{ booking[1] }}</td>
+                    <td>{{ booking[2] }}</td>
+                    <td>{{ booking[7].strftime('%d-%m-%Y') }}</td>
+                    <td>{{ booking[8] }}</td>
+                    <td>{{ booking[9].strftime('%d-%m-%Y') }}</td>
+                    <td>{{ booking[10] }}</td>
+                    <td>{{ booking[11] }}</td>
+                    <td><a href = "{{ url_for('planner.quote_form', bookingID=booking[13])}}" style="color: #740b5d; text-decoration: none; font-weight: bold;">Quote</a></td>
+                    <td>
+                        {% if quotes[booking[13]] %}
+                            <a href="{{ url_for('planner.view_quote', bookingID=booking[13]) }}">View Quote</a>
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            
+        </tbody>
+        
+    </table>  
+    {% else %}
+        <p style="color: brown; padding: 3%;"> You have no jobs yet.</p>
+    {% endif %}
+    
+
+</div>
+{% endblock %}

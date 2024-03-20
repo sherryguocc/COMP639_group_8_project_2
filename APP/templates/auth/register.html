@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class = "container">
+    
+    <div class = "breadcrumb">
+        {% block breadcrumb %}
+        {{ super() }}  
+        <li class="breadcrumb-item active" aria-current="page">Register</li>
+        {% endblock %}
+    </div>
+
+    <h1>Create an account</h1>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      <ul class="flash-messages">
+          {% for message in messages %}
+          <li class="flash-message">{{ message }}</li>
+          {% endfor %}
+      </ul>
+      {% endif %}
+      {% endwith %}
+
+
+    <!-- Registration form begins -->
+    <form action="{{ url_for('auth.register') }}" method="POST" autocomplete="off">
+		<div class="input-group">
+            <label for="title"><i class="fas fa-user"></i></label>
+            <div>
+                <select id = "title" name = "title">
+                <option value = "Mrs">Mrs</option>
+                <option value = "Ms">Ms</option>
+                <option value = "Miss">Miss</option>
+                <option value = "Mr">Mr</option>
+                <option value = "Mx">Mx</option>
+                <option value = "Dr">Dr</option>
+                </select>
+            </div>
+		</div>			
+
+
+		<div class="input-group">
+			<label for="first_name"><i class="fas fa-font"></i></label>
+			<div>
+				<input type="text" name="first_name" placeholder="First Name" id="first_name" required pattern="[a-zA-Z]+" required>
+			</div>
+		</div>
+        
+
+    <div class="input-group">
+			<label for="last_name"><i class="fas fa-font"></i></label>
+            <div>
+                <input type="text" name="last_name" placeholder="Last Name" id="last_name" required pattern="[a-zA-Z]+" required>
+            </div>
+        </div>
+
+        <div class="input-group">		
+            <label for="email"><i class="fas fa-envelope"></i></label>
+            <div>
+				<input type="email" name="email" placeholder="Email" id="email" required>
+            </div>
+        </div>
+
+        <div class="input-group">		
+            <label for="phone"><i class="fas fa-phone"></i></label>
+            <div>
+				<input type="phone" name="phone" placeholder="phone" id="phone">
+            </div>
+        </div>
+
+
+        <div class="input-group">
+			<label for="password"><i class="fas fa-lock"></i></label>
+            <div>
+				<input type="password" name="password" placeholder="Password" id="password" required>
+            </div>
+        </div>
+        
+
+        <div class="input-group">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="confirm_checkbox" required>
+                <label class="form-check-label" for="confirm_checkbox">
+                    By registering, I accept terms and conditions.
+                </label>
+            </div>
+        </div>
+        <input type="submit" name="btn_register" value="Register">
+    </form>
+
+    <!-- Link for users who are already registered -->
+    <p>Already a member?<a href="/auth/login"><b>Log in here.</b></a></p>
+</div>
+
+<script>
+
+    /* JavaScript for client-side validation */
+
+    // Listener for when the document is fully loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        // Input validation for Title field
+        var titleInput = document.getElementById('title');
+        var titleError = document.getElementById('title-error');
+
+        titleInput.addEventListener('input', function() {
+            var inputValue = titleInput.value;
+            var isValid = /^[a-zA-Z]+$/.test(inputValue);
+            
+            if (isValid) {
+                titleError.style.display = 'none';
+            } else {
+                titleError.style.display = 'block';
+            }
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Input validation for First Name field
+        var firstNameInput = document.getElementById('first_name');
+        var firstNameError = document.getElementById('first-name-error');
+
+    firstNameInput.addEventListener('input', function() {
+        var inputValue = firstNameInput.value;
+        var isValid = /^[a-zA-Z]+$/.test(inputValue);
+        
+        if (isValid) {
+            firstNameError.style.display = 'none';
+        } else {
+            firstNameError.style.display = 'block';
+        }
+    });
+    // Input validation for Last Name field
+    var lastNameInput = document.getElementById('last_name');
+    var lastNameError = document.getElementById('last-name-error');
+
+    lastNameInput.addEventListener('input', function() {
+        var inputValue = lastNameInput.value;
+        var isValid = /^[a-zA-Z]+$/.test(inputValue);
+        
+        if (isValid) {
+            lastNameError.style.display = 'none';
+        } else {
+            lastNameError.style.display = 'block';
+        }
+    });
+});
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Input validation for Email field
+        var emailInput = document.getElementById('email');
+        var emailError = document.getElementById('email-error');
+
+        emailInput.addEventListener('input', function() {
+            var inputValue = emailInput.value;
+            var isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inputValue);
+            
+            if (isValid) {
+                emailError.style.display = 'none';
+            } else {
+                emailError.style.display = 'block';
+            }
+        });
+    });
+</script>
+
+
+{% endblock %}
+

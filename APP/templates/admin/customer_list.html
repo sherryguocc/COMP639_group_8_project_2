@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+
+    <div class = "breadcrumb">
+        {% block breadcrumb %}
+        {{ super() }}  
+        <li class="breadcrumb-item"><a href="{{url_for('admin.home')}}">Dashboard</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Customer List</li>
+        {% endblock %}
+    </div>
+
+
+    <!-- Title and Add button -->
+    <div class="header-section">
+    <h3>Customer Management</h3></div><br>
+
+    <!-- Display message if exists -->
+    {% if msg %}
+      <div class="message-section">
+        <div class="alert alert-danger">
+          <span style="color: black;" class="custom-calibri">{{ msg }}</span>
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- Search bar -->
+    <div class="search-section">
+        <form method="POST" action="/admin/customer_list">
+            <button class="button add-button" data-toggle="modal" data-target="#addModal" name="add_customer" value="Add" style = "width: 25%;">Add Member</button><hr>
+
+            <div class = "form-group">
+                <input type="search" name="search_customer" autocomplete="off" placeholder="Search by Name, Email or Address" required>
+                <button type="submit" value="Search" class="button" style = "width: 15%;">Search</button>
+            </div>
+        </form>
+    </div><br>
+
+        
+    <div class = "form-group">
+        <a href="{{ url_for('admin.view_customer') }}" class="mybutton">Reset</a>
+    </div>
+<br>
+
+
+    <!-- Table to list customers -->
+    <div>
+        <table id="bookingTable" data-toggle="table" data-show-export="true" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th data-sortable="true">Title</th>
+                    <th data-sortable="true">First Name</th>
+                    <th data-sortable="true">Last Name</th>
+                    <th data-sortable="true">Email</th>
+                    <th data-sortable="true">Address</th>
+                    <th>User Management</th>
+                    <th>View Bookings</th>
+                    <th>Create Booking</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for customer in customer_list %}
+                    <tr>
+                        <td>{{customer[2]}}</td>
+                        <td>{{customer[3]}}</td>
+                        <td>{{customer[4]}}</td>
+                        <td>{{customer[7]}}</td>
+                        <td>{{customer[8]}}</td>
+                        <td><a href="/admin/manage_customer/{{customer[0]}}">Manage</a></td>
+                        <td><a href="/admin/view_bookings_cust/{{customer[0]}}">View</a></td>
+                        <td><a href = "{{url_for('admin.book_venue', customerID=customer[0])}}">Booking</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+<!-- Add Customer Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header bg-primary text-custom">
+              <h5 class="modal-title" id="addModalLabel">Add Customer</h5>
+              <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <form action="{{ url_for('admin.view_customer')}}" method="POST">
+                  <!-- Title -->
+                  <div class="form-group">
+                      <label for="title"><i class="fas fa-user mr-2"></i>Title</label>
+                      <select class="form-control" id="title" name="title">
+                          <option value="Mrs">Mrs</option>
+                          <option value="Ms">Ms</option>
+                          <option value="Miss">Miss</option>
+                          <option value="Mr">Mr</option>
+                          <option value="Mx">Mx</option>
+                          <option value="Dr">Dr</option>
+                      </select>
+                  </div>
+                  <!-- First Name -->
+                  <div class="form-group">
+                      <label for="first_name"><i class="fas fa-font mr-2"></i>First Name</label>
+                      <input type="text" class="form-control" name="first_name" placeholder="First Name" id="first_name" required pattern="[a-zA-Z]+" required>
+                  </div>
+                  <!-- Last Name -->
+                  <div class="form-group">
+                      <label for="last_name"><i class="fas fa-font mr-2"></i>Last Name</label>
+                      <input type="text" class="form-control" name="last_name" placeholder="Last Name" id="last_name" required pattern="[a-zA-Z]+" required>
+                  </div>
+                  <!-- Email -->
+                  <div class="form-group">
+                      <label for="email"><i class="fas fa-envelope mr-2"></i>Email</label>
+                      <input type="email" class="form-control" name="email" placeholder="Email" id="email" required>
+                  </div>
+                  <!-- Password -->
+                  <div class="form-group">
+                      <label for="password"><i class="fas fa-lock mr-2"></i>Password</label>
+                      <input type="password" class="form-control" name="password" placeholder="Password" id="password" required>
+                  </div>
+                  <!-- Submit button -->
+                  <div class="text-center">
+                      <button type="submit" name="btn_register" value="Register" class="button">Add Customer</button>
+                  </div>
+              </form>
+          </div>
+      </div>
+  </div>
+</div>
+
+               
+
+<script>
+  $(document).ready(function() {
+    $(".add-button").click(function() {
+      $("#addModal").modal("show");
+    });
+  });
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <div class="container">
+
+        <div class="breadcrumb">
+            {% block breadcrumb %}
+            {{ super() }}  
+            <li class="breadcrumb-item"><a href="{{url_for('customer.home')}}">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Booking Details</li>
+            {% endblock %}
+        </div>
+
+        <h2>Booking Details</h2>
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flash-messages">
+                {% for message in messages %}
+                    <li class="flash-message">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        {% endwith %}
+
+        <!-- Tabs for Booking Categories: Upcoming and Historical -->
+        <ul class = "nav nav-tabs" id = "bookingTabs">
+            <li class = "nav-item" role = "presentation">
+                <button class="nav-link active" id="upcoming-tab" data-bs-toggle="tab" href="#upcoming" type="button" role="tab" aria-controls="upcoming" aria-selected="true">Upcoming Bookings</button>
+            </li>
+
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="historical-tab" data-bs-toggle="tab" href="#historical" type="button" role="tab" aria-controls="historical" aria-selected="false">Historical Bookings</button>
+            </li>
+
+        </ul>
+
+        <!-- Tab Contents for Booking Details -->
+        <div class="tab-content mt-3" id="bookingTabsContent">
+             <!-- Upcoming Bookings Content -->
+            <div class="tab-pane fade show active" id="upcoming" role="tabpanel" aria-labelledby="upcoming-tab">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover rounded-table" style="width: 100%;" >
+                        <thead style="background-color: #e3dae1; color: #382a33;">
+                            <tr>
+                                <th>Edit</th>
+                                <th>Reference Number</th>
+                                <th>Planner</th>
+                                <th>Venue</th>
+                                <th>Venue Location</th>
+                                <th>Venue Fee</th>
+                                <th>Menu</th>
+                                <th>Food Price(est)</th>
+                                <th>Decoration Type</th>
+                                <th>Decoration Fee</th>
+                                <th>Start Date</th>
+                                <th>Start Time</th>
+                                <th>End Date</th>
+                                <th>End Time</th>
+                                <th>Guest</th>
+                                <th>Total Estimate</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for booking in booking_details %}
+                            <tr>
+                                <td><a href = "{{url_for('customer.edit_bookings', bookingID = booking.details[20])}}" class = "button"> Edit </a></td>
+                                <td>{{ booking.ref_number }}</td>
+                                <td>{% if booking.details[0] is none %} Awaiting For Planner's Acceptance {% else %} {{ booking.details[0] }} {% endif %}</td>
+                                <td>{{ booking.details[1] }}</td>
+                                <td>{{ booking.details[2] }}</td>
+                                <!--Venue hiring fee-->
+                                <td>{{ booking.details[18] }}</td>
+                                <td>{% if booking.details[4] is none %} N/A  {% else %} {{ booking.details[4] }} {% endif %}</td>
+                                <!--Food price * number of guests-->
+                                <td>${{ booking.details[15] }}</td>
+                                <td>{% if booking.details[6] is none %} N/A {% else %} {{ booking.details[6] }} {% endif %}</td>
+                                <!--decoration fee-->
+                                <td>${{ booking.details[14] }}</td>
+                                <td>{{ booking.details[7].strftime('%d-%m-%Y') }}</td>
+                                <td>{{ booking.details[8] }}</td>
+                                <td>{{ booking.details[9].strftime('%d-%m-%Y') }}</td>
+                                <td>{{ booking.details[10] }}</td>
+                                <td>{{ booking.details[11] }}</td>
+                                <td>${{ booking.details[19] }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>  
+                </div> 
+                <p>The above is an initial estimation that aligns with the selected venue, decoration/styling, and menu options. We kindly request that you engage in further discussions with our event planner to ascertain specific details, after which we will be able to furnish you with a customized and accurate quotation. </p>   
+            </div> 
+
+
+            <!-- Historical Bookings Content -->
+            <div class="tab-pane fade" id="historical" role="tabpanel" aria-labelledby="historical-tab">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover rounded-table" style="width: 100%;" >
+                        <thead style="background-color: #e3dae1; color: #382a33;">
+                            <tr>
+                                <th>Reference Number</th>
+                                <th>Planner</th>
+                                <th>Venue</th>
+                                <th>Venue Location</th>
+                                <th>Venue Hiring Fee</th>
+                                <th>Menu</th>
+                                <th>Estimated Price for Food</th>
+                                <th>Decoration Type</th>
+                                <th>Decoration/Styling Fee</th>
+                                <th>Start Date</th>
+                                <th>Start Time</th>
+                                <th>End Date</th>
+                                <th>End Time</th>
+                                <th>Number of Guests</th>
+                                <th>Total Estimate</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for booking in historical_bookings %}
+                            <tr>
+                                <td>{{ booking.ref_number }}</td>
+                                <td>{% if booking.details[0] is none %} Awaiting For Planner's Acceptance {% else %} {{ booking.details[0] }} {% endif %}</td>
+                                <td>{{ booking.details[1] }}</td>
+                                <td>{{ booking.details[2] }}</td>
+                                <!--Venue hiring fee-->
+                                <td>{{ booking.details[18] }}</td>
+                                <td>{% if booking.details[4] is none %} N/A  {% else %} {{ booking.details[4] }} {% endif %}</td>
+                                <!--Food price * number of guests-->
+                                <td>${{ booking.details[15] }}</td>
+                                <td>{% if booking.details[6] is none %} N/A {% else %} {{ booking.details[6] }} {% endif %}</td>
+                                <!--decoration fee-->
+                                <td>${{ booking.details[14] }}</td>
+                                <td>{{ booking.details[7].strftime('%d-%m-%Y') }}</td>
+                                <td>{{ booking.details[8] }}</td>
+                                <td>{{ booking.details[9].strftime('%d-%m-%Y') }}</td>
+                                <td>{{ booking.details[10] }}</td>
+                                <td>{{ booking.details[11] }}</td>
+                                <td>${{ booking.details[19] }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>  
+                </div>
+                
+            </div>
+        </div>
+            
+    
+        <!-- Export Option for Booking Details -->
+            <form method="post" action="{{ url_for('customer.booking_details', customerID=current_user.id) }}">
+                <label for = "export_method"> PDF 
+                    <input type="radio" style="width:20%;" name="export_method" value="pdf">
+                </label>
+                <input type="submit" value="Export">
+            </form>
+
+    </div>
+
+{% endblock %}

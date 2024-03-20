@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <!-- Display Flash Messages if Available -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class="flash-messages">
+        {% for message in messages %}
+        <li class="flash-message">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+
+    <div class="content-wrapper">
+        <!-- Add a New Menu Button -->
+        <a class="button" href="{{ url_for('admin.add_menu') }}">Add a New Menu</a><br>
+
+        <!-- Cards Section for Menu Listings -->
+        {% for menu in menuList %}
+        <div class="card">
+            <!-- Display Menu Image if Available -->
+            {% if menu.image %}
+            <div class="swiper-slide">
+                <img src="{{ url_for('static', filename=menu.image) }}" alt="Menu Image">
+            </div>
+            {% endif %}
+            <div class="card-body">
+                <!-- Display Menu Name -->
+                <h5 class="card-title title-text">{{ menu.name }}</h5>
+
+                <!-- Display Menu Price -->
+                <p class="card-text"><strong>Price:</strong> ${{ menu.price }}</p>
+
+                <!-- Display Menu Description -->
+                <p class="card-text"><strong>Description:</strong> {{ menu.description }}</p>
+
+                <!-- Menu Buttons -->
+                <div class="menu-button">
+                    <a href="{{ url_for('admin.edit_menu', menu_id=menu.id) }}" class="btn btn-light">Edit</a>
+                    <a href="{{ url_for('admin.delete_menu', menu_id=menu.id) }}" class="btn btn-light">Delete</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="pagination">
+        {% if page > 1 %}
+        <a href="{{ url_for('admin.menu_list', page=page-1) }}"><span class="material-symbols-outlined">arrow_back_ios</span></a>
+        {% endif %}
+        <span>Page {{ page }}</span>
+        {% if menuList|length >= per_page %}
+        <a href="{{ url_for('admin.menu_list', page=page+1) }}"><span class="material-symbols-outlined">arrow_forward_ios</span></a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

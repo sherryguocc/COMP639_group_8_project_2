@@ -1,0 +1,48 @@
+{% if request.path == '/' %}  
+
+    {% if venues %}
+    <!-- Results Container -->
+    <div class="container">
+
+        <div class = "breadcrumb">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="/">Home</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Search Results</li>
+                </ol>
+            </nav>
+        </div>
+        
+
+        <h2>Search Results</h2>
+
+        <!-- Row for organizing search result cards -->
+        <div class="row">
+            {% for venue in venues %}
+            <div class="col-12 col-md-3">
+                <div class="card">
+                    {% if venue.image_content %}
+                        <img src ="{{ venue.image_content[0]}}" class="card-img-top" alt="Image of {{ venue.get_venueName }}">
+                    {% endif %} 
+                    <div class="card-body">
+                        <h5 class="card-title">{{ venue.get_venueName }}</h5>
+
+                        <div class>
+                            <p class="card-text"><strong>Event Area:</strong> {{ venue.get_eventArea }}</p>
+                            <p class="card-text"><strong>Capacity:</strong> {{ venue.get_maxCapacity }}</p>
+                            <p class="card-text"><strong>Location:</strong> {{ venue.get_location }}</p>
+                        </div>   
+                    </div>
+                    <!-- Footer of the card containing a link to view more details about the member -->
+                    <a class="button" href="{{ url_for('home.view_venues', venueID=venue.get_venueID ) }}" >Find out more</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+
+
+{% endif %}
+

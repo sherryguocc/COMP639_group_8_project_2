@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+
+  
+
+<div class="container">
+    <div class = "breadcrumb">
+        {% block breadcrumb %}
+        {{ super() }}  
+        <li class="breadcrumb-item active" aria-current="page">Login</li>
+        {% endblock %}
+    </div>
+    
+
+    <h1>Log in to your account</h1>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      <ul class="flash-messages">
+          {% for message in messages %}
+          <li class="flash-message">{{ message }}</li>
+          {% endfor %}
+      </ul>
+      {% endif %}
+      {% endwith %}
+
+    <!--Form that posts the login credentials to the login route-->
+    <form action="{{ url_for('auth.login') }}" method="POST">
+        <div class="input-group">
+            <label for="email"><i class="fas fa-envelope"></i></label>
+            <input type="email" name="email" placeholder="Email" id="email" required>
+        </div>
+
+        <div class="input-group">
+            <label for="password"><i class="fas fa-lock"></i></label>
+            <input type="password" name="password" placeholder="Password" id="password" required>
+        </div>
+
+        <input type="submit" value="Log in">
+    </form>
+    <p>Not a member? <a href="/auth/register"><b>Register here.</b></a></p>
+</div>
+{% endblock %}
+

@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<div class="container">
+
+    <div class = "breadcrumb">
+        {% block breadcrumb %}
+        {{ super() }}  
+        <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+        {% endblock %}
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flash-messages">
+                {% for message in messages %}
+                    <li class="flash-message">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{url_for('customer.search_venues_route')}}">
+
+
+        <div class="search-control">
+            <h3>Discover Our Finest Venues</h3>
+            <input type="search" name="search_query" autocomplete="off" placeholder="Search venue, location or event area" required>
+            <button type="submit" value="Search" class="button">Search</button>
+        </div>
+    </form>
+
+    {% if venues %}
+    <!-- Results Container -->
+    <div class="container">
+        <h2>Search Results</h2>
+
+        <!-- Row for organizing search result cards -->
+        <div class="row">
+            {% for venue in venues %}
+            <div class="col-12 col-md-4">
+                
+                <div class="card">
+                    {% if venue.image_content %}
+                        <img src ="{{ venue.image_content[0]}}" class="card-img-top" alt="Image of {{ venue.get_venueName }}">
+                    {% endif %} 
+                    <div class="card-body">
+                        <h5 class="card-title">{{ venue.get_venueName }}</h5>
+                        <p class="card-text">Event Area: {{ venue.get_eventArea }} metre square</p>
+                        <p class="card-text">Max Capacity: {{ venue.get_maxCapacity }}</p>
+                        <p class="card-text">Location: {{ venue.get_location }}</p>   
+                    </div>
+                    <!-- Footer of the card containing a link to view more details about the member -->
+                    <div class = "card-footer">
+                        <a href="{{ url_for('customer.book_venue', venueID=venue.get_venueID ) }}" class="Button">Find out more</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+    <div class = "main-dashboard">
+        <div class = "left-panel">
+            <div class = "user-info">
+                <h2>Customer</h2>
+                    <p><strong>User Number: </strong> {{aCust[1]}} </p>
+                    <p><strong>Title: </strong> {{aCust[2]}} </p>
+                    <p><strong>Name: </strong> {{aCust[3]}} {{aCust[4]}} </p>
+                    <p><strong>Email: </strong>{{ aCust[7] }}</p>
+                    <p><strong>Phone Number: </strong>{{ aCust[6] or 'N/A' }}</p>    
+                    <p><strong>Address: </strong>{{ aCust[8] or 'N/A' }}</p> 
+                    <p><strong>Date of Birth: </strong>
+                    {% if aCust[9] %}
+                        {{ aCust[9].strftime('%d-%m-%Y') }}
+                    {% else %}
+                        N/A
+                    {% endif %}</p>  
+            </div>
+
+            <div class = "alerts">
+                <h2>Alerts</h2>
+                {% if unread_messages_count > 0 %}
+                <p style="color: brown;">You have new messages. Please see Message!</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="center-panel">
+            <div class="quick-actions">
+                <ul>
+                    <li><a href="{{ url_for('home.home') }}"><span class="material-symbols-outlined">travel_explore</span>Discorver Venues</a></li>
+                    <li><a href="{{ url_for('customer.booking_details', customerID=current_user.id) }}"><span class="material-symbols-outlined">view_list</span>View Bookings</a></li>
+                    <li><a href="{{ url_for('customer.view_quote') }}"><span class="material-symbols-outlined">request_quote</span>View My Quotes</a></li>
+                    <li>
+                        <a href="{{ url_for('customer.view_messages', customerID = current_user.id) }}">
+                            <div class="button-header pull-left">
+                                <span class="fas fa-envelope msg-icon icon-headernav"></span>
+                                {% if unread_messages_count > 0 %}
+                                    <div class='notification-dot'></div>Message
+                                {% else %}
+                                    Message
+                                {% endif %}
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock %}

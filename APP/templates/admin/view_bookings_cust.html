@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+
+<div class="container">
+    <div class = "breadcrumb">
+        {% block breadcrumb %}
+        {{ super() }}  
+        <li class="breadcrumb-item"><a href="{{url_for('admin.home')}}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{url_for('admin.manage_customer', custID = customer_id)}}">Customer List</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Customer's Booking</li>
+        {% endblock %}
+      </div>  
+
+    <div class="header-section">
+        <h3>Booking of Customer {{aCust[2]}} {{aCust[3]}} {{aCust[4]}}</h3>
+      </div><br>
+
+     <!-- Message -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flash-messages">
+            {% for message in messages %}
+                <li class="flash-message">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <div class="search-container">
+        <form action="{{ url_for('admin.view_bookings_cust', customer_id=customer_id) }}" method="post">
+            <div class="row">
+                <input type="search" name="keyword" placeholder="Customer/Venue/Date" style="display: inline-block; width: 35%; margin-left: 15%;" required>
+                <button type="submit" value="Search" class="button" style="width: 20%;" style="display: inline-block; width: 8%; margin-left: 5%;">Search</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" id="myTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="currentBookings-tab" data-bs-toggle="tab" href="#currentBookings" role="tab" aria-controls="currentBookings" aria-selected="true">Current Bookings</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="historicBookings-tab" data-bs-toggle="tab" href="#historicBookings" role="tab" aria-controls="historicBookings" aria-selected="false">Historical Bookings</button>
+        </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="currentBookings" role="tabpanel" aria-labelledby="currentBookings-tab">
+            <!-- Current bookings content goes here -->
+            <table class="table table-striped table-bordered" id="bookingTable" data-toggle="table">
+                <thead>
+                    <tr>
+                        <th data-sortable="true">Event Date</th>
+                        <th data-sortable="true">Venue Name</th>
+                        <th data-sortable="true">Location</th>
+
+                        <th data-sortable="true">Planner</th>
+                        <th data-sortable="true">Booking Status</th>
+                        <th>View Details</th>
+                    </tr>
+                </thead>
+                {% if current_bookings %}
+                    {% for booking in current_bookings %}
+                        <tr class="currentBooking">
+                            <td>{{ booking[7].strftime('%d-%m-%Y') }} </td> 
+                            <td>{{ booking[3] }} </td> 
+                            <td>{{ booking[4] }} </td> 
+
+                            <td>{{ booking[2] }} </td>
+                            <td>{{ booking[12] }} </td>
+                            <td>
+                                <a href="{{ url_for('admin.individual_booking_details_cust', booking_id=booking[0]) }}" style="color: #740b5d; text-decoration: none; font-weight: bold;"> Booking Details</a> 
+                            </td> 
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr class="currentBooking">
+                        <td colspan="11">No current bookings available.</td>
+                    </tr>
+                {% endif %}
+            </table>
+        </div>
+
+        <div class="tab-pane fade" id="historicBookings" role="tabpanel" aria-labelledby="historicBookings-tab">
+            <!-- Historic bookings content goes here -->
+            <table class="table table-striped table-bordered" id="bookingTable" data-toggle="table">
+                <thead>
+                    <tr class="historicBooking">
+                        <th data-sortable="true">Event Date</th>
+                        <th data-sortable="true">Venue Name</th>
+                        <th data-sortable="true">Location</th>
+                        <th data-sortable="true">Planner</th>
+                        <th data-sortable="true">Booking Status</th>
+                        <th>View Details</th> 
+                    </tr>
+                </thead>
+                {% if historic_bookings %}
+                    {% for booking in historic_bookings %}
+                        <tr class="historicBooking">
+                            <td>{{ booking[7].strftime('%d-%m-%Y') }} </td> 
+                            <td>{{ booking[3] }} </td> 
+                            <td>{{ booking[4] }} </td> 
+                            <td>{{ booking[2] }} </td>
+                            <td>{{ booking[12] }} </td>
+                            <td>
+                                <a href="{{ url_for('admin.individual_booking_details_cust', booking_id=booking[0]) }}" style="color: #740b5d; text-decoration: none; font-weight: bold;"> Booking Details</a> 
+                            </td>  
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr class="historicBooking">
+                        <td colspan="11">No historical booking available.</td>
+                    </tr>
+                {% endif %}
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

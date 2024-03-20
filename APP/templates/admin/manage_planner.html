@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+
+    <div class = "breadcrumb">
+        {% block breadcrumb %}
+        {{ super() }}  
+        <li class="breadcrumb-item"><a href="{{url_for('admin.home')}}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{url_for('admin.view_planner')}}">Planner List</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Planner Profile</li>
+        {% endblock %}
+    </div>
+    
+    <h2>{{planner_selected[2]}} {{planner_selected[3]}} {{planner_selected[4]}}'s Profile</h2>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class="flash-messages">
+        {% for message in messages %}
+        <li class="flash-message">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+    
+    <ul class="nav nav-tabs" id="myTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Profile</a>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Actions</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" id="editProfile-tab" data-bs-toggle="tab" href="#editProfile" role="tab" aria-controls="editProfile">Edit Profile</a></li>
+          </ul>
+        </li>
+    </ul>
+    
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+          <!-- Profile content  -->
+            <h3>Planner's Information</h3>
+            <img src="{{planner_selected[10]}}" alt="Planner Pic" width="250" height="200"><br>
+            <br><p><strong>User Number: </strong> {{planner_selected[1]}} </p>
+            <p><strong>Name: </strong> {{planner_selected[2]}} {{planner_selected[3]}} {{planner_selected[4]}}</p>
+            <p><strong>Email: </strong>{{planner_selected[7]}}</p>
+            <p><strong>Phone Number: </strong>{{planner_selected[6]}}</p>    
+            <p><strong>Address: </strong>{{planner_selected[8]}}</p> 
+            <p><strong>Profile Description:</strong>{{planner_selected[9]}}</p>
+
+            <div class = "card-footer">
+                <form action="{{url_for('admin.manage_planner', plannerID = plannerID)}}" method='POST'>
+                    <button type='submit' class="button delete-button" name="delete_plan" value="{{planner_selected[0]}}" style="width: 20%;">Delete Planner</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="tab-pane fade" id="editProfile" role="tabpanel" aria-labelledby="editProfile-tab">
+          <!-- Edit Profile form -->
+            <form method="POST" action="{{ url_for('admin.manage_planner', plannerID = plannerID) }}">
+                <div class="form-group position-relative">
+                    <label for="title" class="form-label edit-label"><strong>Title*:</strong></label>
+                    <select id = "title" name = "title">
+                        <option value = "{{planner_selected[2]}}">{{planner_selected[2]}}</option>
+                        <option value = "Mr">Mr</option>
+                        <option value = "Mrs">Mrs</option>
+                        <option value = "Ms">Ms</option>
+                        <option value = "Miss">Miss</option>
+                        <option value = "Mx">Mx</option>
+                    </select>
+                </div>
+
+                <div class="form-group position-relative">
+                    <label for="first_name" class="form-label edit-label"><strong>First Name*:</strong></label>
+                    <input type="text" id="first_name" name="first_name" value="{{ planner_selected[3] }}" pattern="[a-zA-Z]+"><br>
+                </div>
+
+                <div class="form-group position-relative">
+                    <label for="last_name" class="form-label edit-label"><strong>Last Name*:</strong></label>
+                    <input type="text" id="last_name" name="last_name" value="{{ planner_selected[4] }}" pattern="[a-zA-Z]+"><br>
+                </div>
+
+                <div class="form-group position-relative">
+                    <label for="email" class="form-label edit-label"><strong>Email*:</strong></label>
+                    <input type="email" id="email" name="email" value="{{ planner_selected[7] }}" pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"><br>
+                </div>
+
+                <div class="form-group position-relative">
+                    <label for="phone" class="form-label edit-label"><strong>Phone:</strong></label>
+                    <input type="tel" id="phone" name="phone" value="{{ planner_selected[6] }}" pattern="[0-9]*"><br>
+                </div>
+
+                <div class="form-group position-relative">
+                    <label for="address" class="form-label edit-label"><strong>Address:</strong></label>
+                    <input type="text" id="address" name="address" value="{{ planner_selected[8] }}"><br>
+                </div>
+
+                <div class="form-group position-relative">
+                    <label for="profile" class="form-label edit-label"><strong>Profile Description:</strong></label>
+                    <input type="text" id="profile" name="profile" value="{{ planner_selected[9] }}"><br>
+                </div>
+
+                <div class="form-group position-relative">
+                    <label for="profile_pic" class="form-label edit-label"><strong>Profile Photo:</strong></label>
+                    <input type="text" id="profile_pic" name="profile_pic" value="{{ planner_selected[10] }}"><br>
+                </div>
+            
+                <div class="btn-toolbar justify-content-between">
+                    <input type="submit" value="Confirm Changes" class="btn btn-dark w-100 w-lg-50" style="margin-bottom: 15px;">
+                </div>
+        
+            </form>     
+        </div>
+    </div>
+</div>
+   
+<script>
+// Add event listener to the delete buttons
+const deleteButtons = document.querySelectorAll('.delete-button');
+deleteButtons.forEach(button => {
+    button.addEventListener('click', function(event) {
+        const plannerId = this.getAttribute('data-planner-id');
+        const confirmDelete = confirm('Warning! Selected planner will be deleted.');
+        if (confirmDelete) {
+            // If user confirms, submit the form for deletion
+            const form = this.parentElement;
+            form.submit();
+        } else {
+            // Prevent the form from being submitted if the user cancels the deletion
+            event.preventDefault();
+        }
+    });
+});
+
+</script>
+
+{% endblock %}

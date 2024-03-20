@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <div class="container">
+
+        <div class="breadcrumb">
+            {% block breadcrumb %}
+            {{ super() }}  
+            <li class="breadcrumb-item"><a href="{{url_for('planner.home')}}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{{url_for('planner.venue_list')}}">Manage Venue</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Manage Menus</li>
+            {% endblock %}
+        </div>
+        <br>
+
+        <!-- Display Flash Messages if Available -->
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul class="flash-messages">
+            {% for message in messages %}
+            <li class="flash-message">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+
+        <h3>Manage Menus</h3><br>
+        <!-- Add a New Menu Button -->
+        
+        <a class="button"href="{{ url_for('planner.add_menu') }}">Add a New Menu</a><br><br><br>
+
+        <!-- Menu Table -->
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Menu Name<br>
+                        <a href="{{ url_for('planner.menu_list', sort='menuName-asc') }}">▲</a>
+                        <a href="{{ url_for('planner.menu_list', sort='menuName-desc') }}">▼</a>
+                    </th>
+                    <th>
+                        Price<br>
+                        <a href="{{ url_for('planner.menu_list', sort='price-asc') }}">▲</a>
+                        <a href="{{ url_for('planner.menu_list', sort='price-desc') }}">▼</a>
+                    </th>
+                    <th>
+                        Description<br>
+                        <a href="{{ url_for('planner.menu_list', sort='description-asc') }}">▲</a>
+                        <a href="{{ url_for('planner.menu_list', sort='description-desc') }}">▼</a>
+                    </th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for menu in menuList %}
+                <tr>
+                    <td>{{ menu.name }}</td>
+                    <td>${{ menu.price }}</td>
+                    <td>{{ menu.description }}</td>
+                    <td>
+                        <a href="{{ url_for('planner.edit_menu', menu_id=menu.food_id) }}" class="btn btn-light">Edit</a>
+                        <a href="{{ url_for('planner.delete_menu', menu_id=menu.food_id) }}" class="btn btn-light">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

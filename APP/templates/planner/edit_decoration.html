@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+
+    <div class="breadcrumb">
+        {% block breadcrumb %}
+        {{ super() }}  
+        <li class="breadcrumb-item"><a href="{{url_for('planner.home')}}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{url_for('planner.venue_list')}}">Manage Venue</a></li>
+        <li class="breadcrumb-item"><a href="{{url_for('planner.decoration_list')}}">Manage Decoration</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Edit Decoration</li>
+        {% endblock %}
+    </div>
+
+    <h2>Edit decoration package</h2>
+    
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flash-messages">
+            {% for message in messages %}
+                <li class="flash-message">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    
+    <div style="display: flex;">
+
+        <div style="flex: 1; margin-right: 20px;">
+            <form method="POST" action="{{ url_for('planner.edit_decoration', decoration_id=decoration.ID) }}">
+
+                <label for="decoration_type">decoration Type:</label>
+                <input type="text" name="decoration_type" value="{{ decoration.decor_type }}" required>
+        
+                <label for="price">Price:</label>
+                <input type="number" name="price" step="0.01" value="{{ decoration.price }}">
+
+                <label for="description">Description:</label>
+                <textarea name="description" rows="4" cols="50" value = "{{ decoration.description}}">{{ decoration.description }}</textarea>
+          
+                <input type="submit" value="Save Changes" class = "button">
+        
+            </form>
+        </div>
+
+        <div style="flex: 1;">
+            {% if decoration.image %}
+                <p>Image of the decoration:</p>
+                <img src="{{ url_for('static', filename=decoration.image) }}" alt="decoration Image"><br><br>
+                <form method="POST" action="{{ url_for('planner.delete_decoration_image', decoration_id=decoration.ID) }}">
+                    <button type="submit" class="btn btn-dark" style="width:100px;" onclick="return confirm('Are you sure you want to delete this image?');">Delete</button>
+                </form><br><br>
+            {% else %}
+                <h5>No Image for this decoration</h5>
+            {% endif %}
+
+            <div class="row">
+                <p>Upload New Image for this decoration (jpg,jepg,png,gif only):</p><br><br>
+                <form method="POST" action="{{ url_for('planner.add_decoration_image', decoration_id=decoration.ID) }}" enctype="multipart/form-data">
+                    <input type="file" name="decoration_image" class="venue-textarea" accept="image/*">
+                    <button type="submit" class="button" style="width:150px;">Upload Image</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

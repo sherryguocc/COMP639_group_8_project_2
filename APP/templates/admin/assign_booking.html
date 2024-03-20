@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+
+    <div class="breadcrumb">
+        {% block breadcrumb %}
+        {{ super() }}  
+        <li class="breadcrumb-item"><a href="{{url_for('admin.home')}}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{url_for('admin.view_bookings')}}">Booking List</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Booking Assignment</li>
+        {% endblock %}
+    </div>
+    <br>
+
+    <!-- <a class = "button" href="{{ url_for('admin.view_bookings') }}" class="button"> Back</a>
+    <br><br>
+     -->
+
+
+    <!-- Display Flash Messages if Available -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class="flash-messages">
+        {% for message in messages %}
+        <li class="flash-message">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+    <!-- Search bar -->
+    
+    <div class="search-section" style="margin-left: 20%;">
+        <form method="POST" action="{{ url_for('admin.assign_booking', booking_id=booking_id) }}">
+
+            <div class = "form-group">
+                <input type="search" name="search_planner" autocomplete="off" placeholder="Search by Planner ID  or Name" required>
+                <button type="submit" value="Search" class="button">Search</button>
+            </div>
+        </form>
+    </div>
+    <br>
+    <hr>
+
+    <div id="update-form" class="edit">
+        <h2>Assign Booking to Planner</h2>
+
+
+            <table id="bookingTable" data-toggle="table" data-show-export="true">
+                <thead>
+                    <!-- Table Header Row -->
+                    <tr>
+                        <th>Planner ID</th>
+                        <th>Planner Name</th>
+                        <th>Current Booking Number</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% if planner_current_booking_number %}
+                    {% for planner in planner_current_booking_number %}
+                        <tr>
+                            <td>{{ planner[0] }}</td>
+                            <td>{{ planner[1] }}</td> 
+                            <td>{{ planner[2] }}</td> 
+                            <td>
+                                <form method="post" action="{{ url_for('admin.assign_booking', booking_id=booking_id) }}" class="accept_form">
+                                    <input type="hidden" name="planner_id" value="{{planner[0]}}" >
+                                    <button type="submit" class="button">Assign</button>
+                                </form>
+                                
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                </tbody>
+            </table>
+    </div>
+</div>
+{% endblock %}

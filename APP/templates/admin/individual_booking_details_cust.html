@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+
+    <div class = "breadcrumb">
+        {% block breadcrumb %}
+        {{ super() }}  
+        <li class="breadcrumb-item"><a href="{{url_for('admin.home')}}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{url_for('admin.manage_customer', custID = booking[1])}}">Customer List</a></li>
+        <li class="breadcrumb-item"><a href="{{url_for('admin.view_bookings_cust', customer_id = booking[1])}}">Customer's Booking</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Booking Details</li>
+        {% endblock %}
+      </div>  
+    
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class="flash-messages">
+        {% for message in messages %}
+        <li class="flash-message">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+
+    <div class="booking-title">
+        <h2>Booking Details</h2>
+        <p>BookingID: {{booking[0]}} | Booking Status: <strong style="color: red;">{{booking[16]}}</strong></p>
+        {% if booking[16] == "Paid" or "Completed" or "Waiting for Payment" or "Processing" %}
+        <button class="button payment-button" data-toggle="modal" data-target="#paymentModal" name="paymentModal" value="Check" style = "width: 25%;">View Payment</button><br>
+        {% endif %}
+    </div>
+    <br>
+    <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-custom">
+                    <h5 class="modal-title" id="paymentModalLabel">Payment Detail</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Booking ID: </strong>{% if payment_details[0] %}{{ payment_details[0] }}{% else %}Awaiting Payment{% endif %}</p>
+                    <p><strong>Payment ID: </strong>{% if payment_details[5] %}{{ payment_details[5] }}{% else %}Awaiting Payment{% endif %}</p>
+                    <p><strong>Paid Amount: </strong>{% if payment_details[1] %}${{ payment_details[1] }}{% else %}Awaiting Payment{% endif %}</p>
+                    <p><strong>Bank Account: </strong>{% if payment_details[2] %}{{ payment_details[2] }}{% else %}Awaiting Payment{% endif %}</p>
+                    <p><strong>Payment Date: </strong>{% if payment_details[3] %}{{ payment_details[3].strftime('%d-%m-%Y') }}{% else %}Awaiting Payment{% endif %}</p>    
+                    <p><strong>Booking Status: </strong><strong style="color: red;">{{payment_details[4]}}</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="booking">
+        
+        <div class="booking-header">
+            <h5>Event Details</h5>
+        </div>
+        <div class="booking-body">
+            <table class="table table-hover rounded-table" >
+                <tr>
+                    <td>Event Start Date & Time</td>
+                    <td>{{booking[11].strftime('%d-%m-%Y')}} {{booking[12]}}</td>
+                </tr>
+                <tr>
+                    <td>Event End Date & Time</td>
+                    <td>{{booking[13].strftime('%d-%m-%Y')}} {{booking[14]}}</td>
+                </tr>
+                <tr>
+                    <td>Venue Name</td>
+                    <td>{{booking[7]}}</td>
+                </tr>
+                <tr>
+                    <td>Venue Location</td>
+                    <td>{{booking[8]}}</td>
+                </tr>
+                <tr>
+                    <td>Guest Number</td>
+                    <td>{{booking[15]}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <br>
+    <div class="booking">
+        <div class="booking-header">
+            <h5>Additional Service</h5>
+        </div>
+        <div class="booking-body">
+            <table class="table table-hover rounded-table" >
+                <tr>
+                    <td>Food Order</td>
+                    <td>{{booking[9]  or 'N/A'}}</td>
+                </tr>
+                <tr>
+                    <td>Decoration Order</td>
+                    <td>{{booking[10]  or 'N/A'}}</td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+<br>
+    <div class="booking">
+        <div class="booking-header">
+            <h5>Planner Details</h5>
+        </div>
+        <div class="booking-body">
+            <table class="table table-hover rounded-table" >
+                <tr>
+                    <td>Planner ID</td>
+                    <td>{{booking[3]}}</td>
+                </tr>
+                <tr>
+                    <td>Planner Name</td>
+                    <td>{{booking[4]}}</td>
+                </tr>
+                <tr>
+                    <td>Phone Number</td>
+                    <td>{{booking[6] or 'N/A'}}</td>
+                </tr>
+                <tr>
+                    <td>Email Address</td>
+                    <td>{{booking[5] or 'N/A'}}</td>
+                </tr>
+            </table>
+
+        </div>
+
+    </div>
+<br>
+    <div class="booking">
+        <div class="booking-header">
+            <h5>Customer Details</h5>
+        </div>
+        <div class="booking-body">
+            <table class="table table-hover rounded-table" >
+                <tr>
+                    <td>Customer ID</td>
+                    <td>{{booking[1]}}</td>
+                </tr>
+                <tr>
+                    <td>Customer Name</td>
+                    <td>{{booking[2] or 'N/A'}}</td>
+                </tr>
+                <tr>
+                    <td>Phone Number</td>
+                    <td>{{booking[17] or 'N/A'}}</td>
+                </tr>
+                <tr>
+                    <td>Email Address</td>
+                    <td>{{booking[18] or 'N/A'}}</td>
+                </tr>
+            </table>
+
+        </div>
+
+    </div>
+
+<br>
+    <div class="booking">
+        <div class="booking-header">
+            <h5>Comments</h5>
+        </div>
+        <div class="booking-body">
+            <table class="table table-hover rounded-table" >
+                <tr>
+                    <td style="width: 10%;"></td>
+                    <td>{{booking[19] or 'N/A'}}</td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+<br>
+    <form method="post" action="{{ url_for('admin.individual_booking_details_cust', booking_id=booking[0]) }}">
+        <div class="form-group position-relative">
+            <input type="radio" id="export_method" name="export_method" value="pdf" style="margin-right: 5px;">
+            <label for="export_method" style="display: inline; margin-left: -50%;">Generate PDF</label>
+        </div>
+        
+        
+        <div class="btn-toolbar justify-content-center">
+            <input type="submit" value="Export" class="btn w-50 w-lg-25" style="margin-bottom: 15px; padding: 8px; background-color: #382a33; width: 10%;">
+        </div>
+    </form>
+
+</div>
+
+<script>
+    $(document).ready(function() {
+      $(".payment-button").click(function() {
+        $("#paymentModal").modal("show");
+      });
+    });
+  
+  </script>
+{% endblock %}

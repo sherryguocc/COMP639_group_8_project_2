@@ -1,0 +1,155 @@
+{% if request.path == '/' %}
+
+<div class="container">
+    <form method="POST" action="/">
+
+        <div class="search-control">
+            <h3>Discover Our Finest Venues</h3>
+            <div class="input-group" style="width: 100%;">
+                <input type="search" name="search_query" autocomplete="on" placeholder="Search venue, location or event area" required>
+                <button class="btn btn-outline-secondary filter-button" data-bs-toggle="modal" data-bs-target="#filtersModal" style="margin-left: -4%;" ><span class="material-symbols-outlined">tune</span></button>
+                <button type="submit" value="Search" class="button" style="margin-left: 20px; width: 100px;">Search</button>
+            </div>
+            
+        </div>
+    </form>
+</div>
+
+<div class = "row">
+    <h3>Featured Venues</h3>
+    <div class="modal fade" id="filtersModal" tabindex="-1" aria-labelledby="filtersModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="filtersModalLabel">Filters</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Your Filters Section -->
+                    <div class="filters-section col-md-12">
+                        <div class="card-body">
+                            <form method="GET" action="{{ url_for('home.home') }}"  class="mb-3" style="margin: 10%;">
+                                <div class="form-group">
+                                    Event Type
+                                    <select class="filter" name="type">
+                                        <option value="all">All</option>
+                                        <option value="wedding">Wedding</option>
+                                        <option value="meeting">Meeting</option>
+                                        <option value="conference">Conference</option>
+                                        <option value="gallery">Gallery</option>
+                                        <option value="team building">Team Building</option>
+                                        <option value="lab">Lab</option>
+                                        <option value="party">Party</option>
+                                        <option value="exhibition">Exhibition</option>
+                                        <option value="outdoor">Outdoor</option>
+                                        <option value="indoor">Indoor</option>
+                                    </select>
+                                </div>
+                                <br>
+                                <button class="button" type="submit">Click to Sort by type</button>
+                            </form>
+                            <!-- Sort Buttons -->
+                            <div class="mb-2" style="margin: 10%;">
+                                <label class="form-label">Sort by Venue Name</label><br>
+                                <a href="{{ url_for('home.home', sort_column='venueName', sort_direction='asc') }}"><span class="material-symbols-outlined">keyboard_arrow_up</span></a>
+                                <a href="{{ url_for('home.home', sort_column='venueName', sort_direction='desc') }}"><span class="material-symbols-outlined">keyboard_arrow_down</span></a>
+                            </div><hr>
+                
+                            <div class="mb-2" style="margin: 10%;">
+                                <label class="form-label">Sort by Location</label><br>
+                                <a href="{{ url_for('home.home', sort_column='location', sort_direction='asc') }}"><span class="material-symbols-outlined">keyboard_arrow_up</span></a>
+                                <a href="{{ url_for('home.home', sort_column='location', sort_direction='desc') }}"><span class="material-symbols-outlined">keyboard_arrow_down</span></a>
+                            </div><hr>
+                
+                            <div class="mb-2" style="margin: 10%;">
+                                <label class="form-label">Sort by Event Area</label><br>
+                                <a href="{{ url_for('home.home', sort_column='event_area', sort_direction='asc') }}"><span class="material-symbols-outlined">keyboard_arrow_up</span></a>
+                                <a href="{{ url_for('home.home', sort_column='event_area', sort_direction='desc') }}"><span class="material-symbols-outlined">keyboard_arrow_down</span></a>
+                            </div><hr>
+                            
+                            <div class = "mb-2" style="margin: 10%;">
+                                <label class="form-label">Sort by Capacity</label><br>
+                                <a href="{{ url_for('home.home', sort_column='capacity', sort_direction='asc') }}"><span class="material-symbols-outlined">keyboard_arrow_up</span></a>
+                                <a href="{{ url_for('home.home', sort_column='capacity', sort_direction='desc') }}"><span class="material-symbols-outlined">keyboard_arrow_down</span></a>
+                            </div><hr>
+                    
+                            <div class = "mb-2" style="margin: 10%;">
+                                <label class="form-label">Sort by Daily Price</label><br>
+                                <a href="{{ url_for('home.home', sort_column='daily_price', sort_direction='asc') }}"><span class="material-symbols-outlined">keyboard_arrow_up</span></a>
+                                <a href="{{ url_for('home.home', sort_column='daily_price', sort_direction='desc') }}"><span class="material-symbols-outlined">keyboard_arrow_down</span></a>
+                            </div><hr>
+                    
+                            <div class = "mb-2" style="margin: 10%;">
+                                <label class="form-label">Sort by Hourly Price</label><br>
+                                <a href="{{ url_for('home.home', sort_column='hourly_price', sort_direction='asc') }}"><span class="material-symbols-outlined">keyboard_arrow_up</span></a>
+                                <a href="{{ url_for('home.home', sort_column='hourly_price', sort_direction='desc') }}"><span class="material-symbols-outlined">keyboard_arrow_down</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+      
+
+    <!-- Cards Section -->
+    <div class="card-section col-md-12">
+        <div class="row">
+            <!-- Venues Section -->
+            {% for venue in venueList %}
+            <div class="col-md-2">
+                <div class="card mb-3" style="margin: 5%;">
+                    <!-- Display Venue Image -->
+                    {% if venue.image_content and venue.image_content[0] %}
+                    <div class="swiper-slide">
+                        <img src="{{ venue.image_content[0] }}" alt="Venue Image">
+                    </div>
+                    {% endif %} 
+                    <div class="card-body" >
+                        <h5 class="card-title title-text">{{ venue.get_venueName }}</h5>
+                        <!-- Display Event Area, Capacity, and Location -->
+    
+                        <div class = "capacity" style="margin-bottom: 5%;">
+                            <p class="card-text"><strong><span class="material-symbols-outlined">width</span></strong> {{ venue.get_eventArea }} m2</p>
+                            <p class="card-text"><strong><span class="material-symbols-outlined">groups</span></strong> {{ venue.get_maxCapacity }}</p>
+                            <p class="card-text"><strong><span class="material-symbols-outlined">location_on</span></strong> {{ venue.get_location }}</p>
+                        </div>
+    
+                        <!-- Venue Button -->
+                        <a class="button mt-2" href="{{ url_for('home.view_venues', venueID=venue.get_venueID ) }}">Find out more</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+    <!-- Pagination Controls -->
+    <nav aria-label="Venue pagination" class="mt-4">
+        <ul class="pagination justify-content-center">
+            <!-- Previous Page Link -->
+            {% if page > 1 %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('home.home', page=page-1) }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+            <!-- Current Page Number -->
+            <li class="page-item disabled">
+                <span class="page-link">Page {{ page }}</span>
+            </li>
+            <!-- Next Page Link -->
+            {% if venueList|length >= per_page %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('home.home', page=page+1) }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+
+
+{% endif %}

@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+
+    <div class="breadcrumb">
+        {% block breadcrumb %}
+        {{ super() }}  
+        <li class="breadcrumb-item"><a href="{{ url_for('admin.home') }}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('admin.generate_report') }}">Generate Report</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Report</li>
+        {% endblock %}
+    </div>
+    
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class="flash-messages">
+        {% for message in messages %}
+        <li class="flash-message">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+{% endwith %}
+
+{% if revenue_report %}
+<h3>Revenue Report</h3>
+
+<div class="chart-container">
+    <canvas id="revenueChart" width="400" height="300"></canvas>
+</div>
+<div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Venue Name</th>
+                <th>Total Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in revenue_report %}
+            <tr>
+                <td>{{ entry[1] }}</td>
+                <td>{{ entry[2] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% elif popularity_report %}
+    <h3>Popularity Report</h3>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul class="flash-messages">
+            {% for message in messages %}
+            <li class="flash-message">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
+
+    <div class="chart-container">
+        <canvas id="popularityChart" width="600" height="400"></canvas>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Venue Name</th>
+                <th>Number of Bookings</th>
+                <th>Percentage of Total</th>
+                <th>Average Revenue</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in popularity_report %}
+            <tr>
+                <td>{{ entry[1] }}</td>
+                <td>{{ entry[2] }}</td>
+                <td>{{ entry[3] }}%</td>
+                <td>{{ entry[4] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>  <!-- Close the popularity report div -->
+    {% endif %}
+
+    {% if revenue_report %}
+    <script>
+        var ctx = document.getElementById('revenueChart').getContext('2d');
+    
+        // Clear the canvas before rendering a new chart
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    
+        // Data for the chart (example data; replace with your data)
+        var revenueData = {
+            labels: [
+            {% for entry in revenue_report %}
+                "{{ entry[1] }}",
+            {% endfor %}
+            ],
+            datasets: [
+                {
+                    label: 'Total Amount',
+                    data: [
+                        {% for entry in revenue_report %}
+                        {% if entry[2] is none %}
+                        0
+                        {% else %}
+                        {{ entry[2] }},
+                        {% endif %}
+                        {% endfor %}
+                    ],
+                    backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                }
+            ]
+        };
+    
+        // Create the bar chart
+        var revenueChart = new Chart(ctx, {
+            type: 'bar',
+            data: revenueData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        stacked: true
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+    
+{% else %}
+<script>
+    var ctx = document.getElementById('popularityChart').getContext('2d');
+
+    // Data for the chart (example data; replace with your data)
+    var popularityData = {
+        labels: [ <!-- Venue Names -->
+            {% for entry in popularity_report %}
+                "{{ entry[1] }}",
+            {% endfor %}
+        ],
+        datasets: [
+            {
+                label: 'Number of Bookings',
+                data: [ <!-- Number of Bookings -->
+                    {% for entry in popularity_report %}
+                        {{ entry[2] }},
+                    {% endfor %}
+                ],
+                backgroundColor: 'rgba(75, 192, 192, 0.7)',
+            }
+        ]
+    };
+
+    var popularityChart = new Chart(ctx, {
+        type: 'bar',
+        data: popularityData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    stacked: true
+                },
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+{% endif %}   
+{% endblock %}

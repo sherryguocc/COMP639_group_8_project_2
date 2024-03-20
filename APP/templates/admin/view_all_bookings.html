@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <div class="container">
+
+        <div class="breadcrumb">
+            {% block breadcrumb %}
+            {{ super() }}  
+            <li class="breadcrumb-item"><a href="{{url_for('admin.home')}}">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Booking List</li>
+            {% endblock %}
+        </div>
+    
+        
+        <h3>View Bookings</h3><br>
+
+        <div class = "form-group">
+            <a href="{{ url_for('admin.home') }}" class="button"> Back</a>
+            <a href="{{ url_for('admin.view_bookings') }}" class="mybutton">Reset</a>
+        </div>
+    <br>
+        <!-- Message -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="flash-messages">
+                {% for message in messages %}
+                    <li class="flash-message">{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <div class="search-container">
+            <form action="{{ url_for('admin.view_bookings') }}" method="post">
+                <div class="row">
+                    <input type="search" name="keyword" placeholder="Customer/Planner/Venue/Date" style="display: inline-block; width: 50%; margin-left: 10%;" required>
+                    <button type="submit" value="Search" class="button" style="display: inline-block; width: 15%; margin-left: 2%;">Search</button>
+                </div>
+            </form>
+        </div>
+        <br>
+        <hr>
+        
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" id="myTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="currentBookings-tab" data-bs-toggle="tab" href="#currentBookings" role="tab" aria-controls="currentBookings" aria-selected="true">Current Bookings</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="historicBookings-tab" data-bs-toggle="tab" href="#historicBookings" role="tab" aria-controls="historicBookings" aria-selected="false">Historic Bookings</button>
+            </li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="currentBookings" role="tabpanel" aria-labelledby="currentBookings-tab">
+                <!-- Current bookings content goes here -->
+                <table class="table table-striped table-bordered" id="bookingTable" data-toggle="table">
+                    <thead>
+                        <tr>
+                            <th>Event Date</th>
+                            <th data-sortable="true">Venue Name</th>
+                            <th data-sortable="true">Location</th>
+                            <th data-sortable="true">Planner</th>
+                            <th data-sortable="true">Customer</th>
+                            <th data-sortable="true">Booking Status</th>
+                            <th>View Details</th>
+                            <th>Action</th> 
+                        </tr>
+                    </thead>
+                    <tbody>
+                {% if current_bookings %}
+                    {% for booking in current_bookings %}
+                        <tr class="currentBooking">
+                            <td>{{ booking[11].strftime('%d-%m-%Y') }} </td> 
+                            <td>{{ booking[7] }} </td>
+                            <td>{{ booking[8] }} </td> 
+                            <td>{{ booking[4] }} </td> 
+                            <td>{{ booking[2] }} </td>
+                            <td>{{ booking[16] }} </td>
+                            <td><a href="{{ url_for('admin.individual_booking_details', booking_id=booking[0]) }}" style="color: #740b5d; text-decoration: none; font-weight: bold;"> Booking Details</a> </td>  
+                            <td>
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Manage Booking
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="userDropdown">
+                                    <a class="dropdown-item" href="{{ url_for('admin.assign_booking', booking_id=booking[0])}}"><span class="material-icons">perm_identity</span>Change Planner</a>
+                                    <a class="dropdown-item" href="{{ url_for('admin.edit_booking', booking_id=booking[0])}}"><span class="material-icons">edit</span>Edit Booking</a>
+                                    <a class="dropdown-item" href="{{ url_for('admin.cancel_booking', booking_id=booking[0])}}"><span class="material-icons">delete</span> Cancel Booking</a>
+                                </div>
+                        </td>
+                        </tr>
+                        {% endfor %}
+                {% else %}
+                        <tr class="currentBooking">
+                            <td colspan="11">No historic bookings available.</td>
+                        </tr>
+                {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tab-pane fade" id="historicBookings" role="tabpanel" aria-labelledby="historicBookings-tab">
+                <!-- Historic bookings content goes here -->
+                <table class="table table-striped table-bordered" id="bookingTable" data-toggle="table">
+                    <thead>
+                        <tr>
+                            <th>Event Date</th>
+                            <th data-sortable="true">Venue Name</th>
+                            <th data-sortable="true">Location</th>
+                            <th data-sortable="true">Planner</th>
+                            <th data-sortable="true">Customer</th>
+                            <th data-sortable="true">Booking Status</th>
+                            <th data-sortable="true">View Details</th> 
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if historic_bookings %}
+                            {% for booking in historic_bookings %}
+                            <tr>
+                                <td>{{ booking[11].strftime('%d-%m-%Y') }} </td> 
+                                <td>{{ booking[7] }} </td>
+                                <td>{{ booking[8] }} </td> 
+                                <td>{{ booking[4] }} </td> 
+                                <td>{{ booking[2] }} </td>
+                                <td>{{ booking[16] }} </td>
+                                <td><a href="{{ url_for('admin.individual_booking_details', booking_id=booking[0]) }}" style="color: #740b5d; text-decoration: none; font-weight: bold;"> Booking Details</a> </td>  
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr class="historicBooking">
+                                <td colspan="11">No historic bookings available.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}

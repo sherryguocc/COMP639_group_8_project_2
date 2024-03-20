@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class = "container">
+
+    <div class = "breadcrumb">
+        {% block breadcrumb %}
+        {{ super() }}  
+        <li class="breadcrumb-item active" aria-current="page">Venue Detail</li>
+        {% endblock %}
+    </div>
+
+    <div>
+        <a href="{{ url_for('home.home') }}" class="button">Back</a>
+    </div>
+    <br>
+    <br>
+
+    <div class="row">
+
+        <div class="col-lg-7">
+            <!-- Display Selected Venue Details -->
+            <h2>{{ venue.get_venueName }}</h2>
+
+            <div class = "swiper-wrapper-outer-container">
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        {% for image_url in venue.image_content %}
+                        <div class="swiper-slide">
+                            <img src="{{ image_url }}" alt="Venue Image" class="image-class">
+                        </div>
+                        {% endfor %}
+                    </div>
+    
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="col-lg-5">
+            <div class="right-container">
+                <p><strong>Location:</strong> {{ venue.get_location }}</p>
+                <p><strong>Event Area:</strong> {{ venue.get_eventArea }} metre square</p>
+                <p><strong>Max Capacity:</strong> {{ venue.get_maxCapacity }}</p>
+                <p><strong>Hire Per Day:</strong> ${{ venue.get_dailyPrice }}</p>
+                <p><strong>Hire (Hourly Rate):</strong> ${{ venue.get_hourlyPrice }}</p>
+                <p> {{ venue.get_description }}</p><br>
+                {% if current_user.is_authenticated %}
+                                    
+                    {% if current_user.role == 'admin' or current_user.role == 'planner' %}
+                    <input type="text" hidden>
+                    {% elif current_user.role == 'customer' %}
+                    <a href = "{{url_for('customer.book_venue', venueID = venue.get_venueID )}}" class = "button">Book</a>
+                    {% endif %}
+                {% else %}
+                <a href = "{{url_for('auth.login')}}" class = "button" onclick="loginReminder()">Book</a>
+                {% endif %}
+            </div>
+            
+        </div>
+    </div>
+
+    
+</div>
+
+<script>
+        const swiper = new Swiper('.swiper-container', {
+        pagination: {
+            el: '.swiper-pagination',
+            type: 'bullets',
+            clickable: true
+        },
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+    });
+
+    function loginReminder() {
+        alert("To book a venue, please login or sign up.");
+    }
+</script>
+
+{% endblock %}

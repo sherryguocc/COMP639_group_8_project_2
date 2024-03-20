@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container" style="padding-bottom: 10%;">
+
+    <div class="breadcrumb">
+        {% block breadcrumb %}
+        {{ super() }}  
+        <li class="breadcrumb-item"><a href="{{url_for('planner.home')}}">Dashboard</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Messages</li>
+        {% endblock %}
+    </div>
+
+
+    <!-- Message list grouping -->
+    <div class="list-group">
+        <h3>Messages</h3>
+        <a href="{{ url_for('planner.view_messages', plannerID = current_user.id) }}" class="mybutton" style="width: 100px;">Refresh</a><br>
+
+
+        {% if messages %}
+            <!-- Loop through each message and display them -->
+            {% for message in messages %}
+            <!-- Message item. If unread, adds a class for styling -->
+            <a href="#" 
+            onclick="markAsRead(event, '{{ message['reminderID'] }}', this)" 
+            class="list-group-item list-group-item-action message-item {{ 'unread' if message['status'] == 'unread' else '' }}" 
+            data-reminder-id="{{ message['reminderID'] }}"
+            data-message-content="{{ message['content'] }}">
+                {{ message['content'] }}
+            </a>
+            {% endfor %}
+        {% else %}
+            <div class="list-group-item"> <p style="font-family: Arial, Helvetica, sans-serif;">You have no messages.</p> </div>
+            
+        {% endif %}
+    </div>
+    
+</div>
+
+<!-- Message Modal to show the content of the clicked message -->
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal header with the title and a close button -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="messageModalLabel">Message</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Modal body to display the message content -->
+            <div class="modal-body" id="messageContent">
+
+            </div>
+            <!-- Modal footer with close and delete buttons -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" id="deleteMessageButton">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // JavaScript and jQuery functionalities for the page
+    $(document).ready(function() {
+        // Listen to a click event on each message item
+        $('.message-item').on('click', function() {
+            // Extract the reminderID and the message content from the clicked element
+            var reminderID = $(this).data('reminder-id');
+            var messageContent = $(this).data('message-content');
+            // Set the modal's body text with the message content and show the modal
+            $('#messageContent').text(messageContent);
+            var messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
+            $('#deleteMessageButton').attr('data-reminder-id', reminderID); // Set reminderID as data attribute
+            messageModal.show();
+        });
+
+        // Attach a click event to the delete button
+        $('#deleteMessageButton').on('click', function() {
+            var reminderID = $(this).data('reminder-id');
+            deleteMessage(reminderID);
+        });
+    });
+
+
+    // Function to show message content in the modal
+    function showMessage(content, reminderID) {
+        // Set the modal's body text with the message content
+        $('#messageContent').text(content);
+        // Attach reminderID as a data attribute to the delete button
+        $('#messageModal .btn-danger').attr('data-reminder-id', reminderID);
+        // Show the modal
+        $('#messageModal').modal('show');
+    }
+
+    // Function to mark a message as read using an AJAX request
+    function markAsRead(event, reminderID, element) {
+
+        // Prevent the default behavior of the anchor tag
+        event.preventDefault();
+        // Make a POST request to the server to mark the message as read
+        fetch('/planner/mark_as_read/' + reminderID, {
+            method: 'POST'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            // On success, remove the 'unread' class from the clicked element
+            element.classList.remove('unread');
+        })
+        .catch(error => {
+            console.error('Error marking message as read:', error);
+        });
+    }
+    
+    // Function to delete a message using an AJAX request
+    function deleteMessage(reminderID) {
+        // Make a POST request to the server to delete the message
+        fetch('/planner/delete_message/' + reminderID, {
+            method: 'POST'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            // Close the modal after successfully deleting the message
+            var messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
+            messageModal.hide();
+
+            // Remove the deleted message from the message list
+            removeMessageFromList(reminderID);
+        })
+        .catch(error => {
+            console.error('Error deleting message:', error);
+        });
+    }
+
+    // Function to remove the deleted message from the list
+    function removeMessageFromList(reminderID) {
+        // Find the message item with the matching reminderID and remove it from the list
+        $('.message-item[data-reminder-id="' + reminderID + '"]').remove();
+    }
+</script>
+
+{% endblock %}

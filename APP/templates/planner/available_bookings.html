@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container" style="margin-bottom: 10%;">
+
+    <div class = "breadcrumb">
+        {% block breadcrumb %}
+        {{ super() }}  
+        <li class="breadcrumb-item"><a href="{{url_for('planner.home')}}">Dashboard</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Unassigned Booking List</li>
+        {% endblock %}
+    </div>
+
+    <h2>Unassigned Booking List</h2>
+
+    <!-- Table for Displaying Available Bookings -->
+    <table id="bookingTable" data-toggle="table" >
+        <thead>
+            <!-- Table Header Row -->
+            <tr>
+                <th>Customer</th>
+                <th>Venue</th>
+                <th>Location</th>
+                <th>Menu</th>
+                <th>DecorationType</th>
+                <th data-sortable="true">Start Date</th>
+                <th data-sortable="true">Start Time</th>
+                <th data-sortable="true">End Date</th>
+                <th data-sortable="true">End Time</th>
+                <th data-sortable="true">Guest Number</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if available_bookings %}
+            {% for booking in available_bookings %}
+                <tr>
+                    <td>{{ booking[0] }}</td>
+                    <td>{{ booking[2] }}</td> 
+                    <td>{{ booking[3] }}</td> 
+                    <td>{% if booking[5] is none %} N/A {% else %} {{booking[5]}} {% endif %}</td>
+                    <td>{% if booking[7] is none %} N/A {% else %} {{booking[7]}} {% endif %}</td> 
+                    <td>{{ booking[8].strftime('%d-%m-%Y') }}</td>
+                    <td>{{ booking[9] }}</td>
+                    <td>{{ booking[10].strftime('%d-%m-%Y') }}</td>
+                    <td>{{ booking[11] }}</td>
+                    <td>{{ booking[12] }}</td>
+                    <td>
+                        <!-- Form for Accepting a Booking -->
+                        <form method="post" action="{{ url_for('planner.select_booking', bookingID = booking[13]) }}" class="accept_form">
+                            <input type="hidden" name="bookingID" value="{{ booking[13] }}">
+                            <button type="submit" onclick="return confirmSubmit();" class="button">Accept</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <!-- No Available Bookings -->
+            <tr>
+                <td colspan="11">No bookings available.</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+// JavaScript function to confirm booking acceptance
+function confirmSubmit() {
+    return confirm('Are you sure you would like to take on this booking?');
+}
+</script>
+
+{% endblock %}

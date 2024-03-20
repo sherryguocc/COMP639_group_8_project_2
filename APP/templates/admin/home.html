@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class = "container">
+
+    <div class = "breadcrumb">
+        {% block breadcrumb %}
+        {{ super() }}  
+        <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+        {% endblock %}
+    </div>
+
+    <!-- Display Flash Messages if Available -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul class="flash-messages">
+            {% for message in messages %}
+            <li class="flash-message">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
+
+    <div class = "main-dashboard">
+        <div class = "left-panel">
+            <div class = "user-info">
+                <h2>Administrator</h2>
+                <p><strong>User Number: </strong> {{anAdmin[1]}} </p>
+                <p><strong>Title: </strong> {{anAdmin[2]}} </p>
+                <p><strong>Name: </strong> {{anAdmin[3]}} {{anAdmin[4]}}</p>
+                <p><strong>Position: </strong>{{ anAdmin[5] }}</p>
+                <p><strong>Email: </strong>{{ anAdmin[7] }}</p>
+                <p><strong>Phone Number: </strong>{{anAdmin[6] or 'N/A' }}</p>  
+            </div>
+
+            <div class = "alerts">
+                <h2>Alerts</h2>
+                {% if unread_messages_count > 0 %}
+                <p style="color: brown;">You have new messages. Please see Message!</p>
+                {% endif %}
+
+            </div>
+        </div>
+
+        <div class="center-panel">
+            <div class="quick-actions">
+                <ul>
+                    <li>
+                        <a href="{{ url_for('admin.view_customer') }}"><span class="material-symbols-outlined">group</span>Manage Customer</a>
+                    </li>
+
+                    <li>
+                        <a href="{{ url_for('admin.view_planner') }}"><span class="material-symbols-outlined">manage_accounts</span> Manage Planner</a>
+                    </li>
+
+                    <li>
+                        <a href="{{url_for('admin.venue_list')}}"><span class="material-symbols-outlined">location_city</span>Manage Venue</a>
+                    </li>
+                        
+                    <li>
+                        <a href="{{ url_for('admin.view_bookings') }}"><span class="material-symbols-outlined">wysiwyg</span>View Bookings</a>
+                    </li>
+
+                    <li>
+                        <a href="{{ url_for('admin.unassign_bookings') }}"><span class="material-symbols-outlined">wysiwyg</span>Unassigned Bookings</a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('admin.generate_report') }}"><span class="material-symbols-outlined">view_timeline</span>Reports</a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('admin.view_messages', adminID = current_user.id) }}">
+                            <div class="button-header pull-left">
+                                <span class="fas fa-envelope msg-icon icon-headernav"></span>
+                                {% if unread_messages_count > 0 %}
+                                    <div class='notification-dot'></div>Message
+                                {% else %}
+                                    Message
+                                {% endif %}
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

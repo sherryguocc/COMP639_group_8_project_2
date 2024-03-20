@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <div class="breadcrumb">
+        {% block breadcrumb %}
+        {{ super() }}  
+        <li class="breadcrumb-item"><a href="{{url_for('planner.home')}}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{url_for('planner.generate_report')}}">Generate Report</a></li>
+        <li class="breadcrumb-item active" aria-current="page">View Report</li>
+        {% endblock %}
+    </div>
+
+{% if workload_report %}
+<h3>Workload Report</h3>
+
+<div class="chart-container">
+    <canvas id="workloadChart" width="600" height="400"></canvas>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Planner Name</th>
+            <th>Workload</th>
+            <th>Total Guests</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for entry in workload_report %}
+        <tr>
+            <td>{{ entry[0] }}</td>
+            <td>{{ entry[1] }}</td>
+            <td>{{ entry[2] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+<script>
+    var ctx = document.getElementById('workloadChart').getContext('2d');
+    
+    // Data for the chart
+    var workloadData = {
+        labels: [
+            {% for entry in workload_report %}
+                "{{ entry[0] }}",
+            {% endfor %}
+        ],
+        datasets: [
+            {
+                label: 'Workload',
+                data: [
+                    {% for entry in workload_report %}
+                        {{ entry[1] }},
+                    {% endfor %}
+                ],
+                backgroundColor: 'rgba(75, 192, 192, 0.7)',
+            }
+        ]
+    };
+
+    var workloadChart = new Chart(ctx, {
+        type: 'bar',
+        data: workloadData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+        }
+    });
+</script>
+
+{% endblock %}

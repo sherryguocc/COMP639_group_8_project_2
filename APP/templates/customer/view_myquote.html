@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+
+    <div class="breadcrumb">
+        {% block breadcrumb %}
+        {{ super() }}  
+        <li class="breadcrumb-item"><a href="{{url_for('customer.home')}}">Dashboard</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Quotes</li>
+        {% endblock %}
+    </div>
+
+    <h2>My Quotes</h2>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flash-messages">
+                {% for message in messages %}
+                    <li class="flash-message">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Table for Displaying Quotes -->
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover rounded-table">
+            <thead style="background-color: #e3dae1; color: #382a33;">
+                <tr>
+                    <th>Booking Date & Time</th>
+                    <th>Guests Number</th>
+                    <th>Status</th>
+                    <th>Ref Num</th>
+                    <th>Venue Fee</th>
+                    <th>Decoration Fee</th>
+                    <th>Menu Price</th>
+                    <th>Additional Requirements</th>
+                    <th>Additional Fee</th>
+                    <th>Discounts</th>
+                    <th>Expiry Date</th>
+                    <th>Payment Terms</th>
+                    <th>Total (Before Tax)</th>
+                    <th>GST Amount</th>
+                    <th>Total (With GST)</th>
+                    <th>View Here</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in quotes_with_status %}
+                {% set quote = entry.quote %}
+                <tr>
+                    <td>{{ quote[21] }} {{ quote[22] }} to {{ quote[23] }} {{ quote[24] }}</td>
+                    <td>{{ quote[25] }}</td>
+                    <td>{{ quote[27] }}</td>
+                    <td>{{ quote[28] }}</td>
+                    <td>{{ quote[2] }}</td>
+                    <td>{{ quote[3] }}</td>
+                    <td>{{ quote[4] }}</td>
+                    <td>{{ quote[5] }}</td>
+                    <td>{{ quote[14] }}</td>
+                    <td>{{ quote[6] }}</td>
+                    <td>{{ quote[8] }}</td> <!--expiry date-->
+                    <td>{{ quote[9] }}</td>
+                    <td>{{ quote[10] }}</td>
+                    <td>{{ quote[11] }}</td>
+                    <td>{{ quote[12] }}</td>
+                    {% if entry.expired %}
+                        <td colspan="2">Sorry, quote expired!</td>
+                    {% else %}
+                        <td><a href="{{ url_for('customer.customer_view_quote', bookingID=quote[1]) }}">View Quote</a></td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
